@@ -2,16 +2,17 @@ package simulator.model;
 
 import java.util.List;
 
-public class Vehicle extends SimulatedObject {
+public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	private List<Junction> _itinerary;
-	private int _maxima;
-	private int _actual;
+	private int _vMaxima;
+	private int _vActual;
 	private VehicleStatus _status;
 	private Road _carretera;
 	private int _pos;
 	private int _contClass;
 	private int _contamAcum;
 	private int _dist;
+	private int _currentJunction;
 	
 	Vehicle(String id, int maxSpeed, int contClass, List<Junction> itinerary) {
 		  super(id);
@@ -21,8 +22,8 @@ public class Vehicle extends SimulatedObject {
 		 
 		  else if (_itinerary.size() < 2) throw new Exception("Itinerario invalido");
 		  
-		  this._maxima = maxSpeed;
-			this._actual = 0;
+		  this._vMaxima = maxSpeed;
+			this._vActual = 0;
 			this._status = VehicleStatus.PENDING;
 			this._pos = 0;
 			this._carretera = null;
@@ -30,15 +31,16 @@ public class Vehicle extends SimulatedObject {
 			this._contamAcum = 0;
 			this._dist = 0;
 			this._itinerary = Collections.unmodifiableList(new ArrayList<>(itinerary));
+			this._currentJunction = 0;
 	}
 		
-	public void setSpeed (int s) {
+	public void setSpeed (int s) throws Exception {
 		if(s < 0) throw new Exception ("Velocidad no valida");
-		else if(s >= this._maxima) this._actual = this._maxima;
-		else this._actual = s;
+		else if(s >= this._vMaxima) this._vActual = this._vMaxima;
+		else this._vActual = s;
 	}
 	
-	public void setContaminationClass(int c) {
+	public void setContaminationClass(int c) throws Exception {
 		if(0 > _contClass || _contClass > 10) throw new Exception("Contaminacion invalida");
 		else this._contClass = c;
 	}
@@ -46,7 +48,7 @@ public class Vehicle extends SimulatedObject {
 	public void advance(int time){
 	
 		if(_status == VehicleStatus.TRAVELING) {
-			int posAux = this._pos + this._actual;
+			int posAux = this._pos + this._vActual;
 			int length = this._carretera.getLength();
 			int distAux;
 			int contAux;
@@ -54,7 +56,7 @@ public class Vehicle extends SimulatedObject {
 				distAux = length - this._pos;
 				this._pos = length;
 				this._status = VehicleStatus.WAITING;
-				this._actual = 0;
+				this._vActual = 0;
 			}
 			else {
 				distAux = posAux - this._pos;
@@ -73,12 +75,30 @@ public class Vehicle extends SimulatedObject {
 		
 		else {
 			if(this._carretera != null) this._carretera.exit();
-			else if(this._status == VehicleStatus.WAITING &&
-					!this._itinerary.hasNext()) {
+			else if(this._currentJunction == this._itinerary.size() - 1) {
 				this._status = VehicleStatus.ARRIVED;
 				this._carretera = null;
-				this._actual = 0;
+				this._vActual = 0;
+			}
+			else {
+				//añadir coche a la siguiente carretera del itinerario
+				this._currentJunction++;
+				this._pos = 0;
+				this._status = VehicleStatus.TRAVELING;
 			}
 		}
+	}
+
+	@Override
+	public JSONObject report() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int compareTo(Vehicle o) {
+		if(this._pos > o._pos) return 1;
+		else if(this._pos < o._pos) return -1;
+		return 0;
 	}
 }
