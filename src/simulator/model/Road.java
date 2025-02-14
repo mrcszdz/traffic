@@ -2,6 +2,7 @@ package simulator.model;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 abstract public class Road extends SimulatedObject{
@@ -91,7 +92,8 @@ abstract public class Road extends SimulatedObject{
 			this.calculateVehicleSpeed(it.next());
 			it.next().advance(time);
 		}
-		this._listaCoches.sort(null);
+//		this._listaCoches.sort(Comparator<Vehicle>);
+		Collections.sort(_listaCoches); 
 	}
 	
 	abstract public void reduceTotalContamination();
