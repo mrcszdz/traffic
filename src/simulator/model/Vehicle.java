@@ -1,5 +1,7 @@
 package simulator.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
@@ -14,7 +16,7 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	private int _dist;
 	private int _currentJunction;
 	
-	Vehicle(String id, int maxSpeed, int contClass, List<Junction> itinerary) {
+	Vehicle(String id, int maxSpeed, int contClass, List<Junction> itinerary) throws Exception {
 		  super(id);
 		  if(maxSpeed < 0) throw new Exception("Velocidad maxima negativa");
 		 
@@ -32,6 +34,46 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 			this._dist = 0;
 			this._itinerary = Collections.unmodifiableList(new ArrayList<>(itinerary));
 			this._currentJunction = 0;
+	}
+	
+	public List<Junction> getItinerary() {
+	    return _itinerary;
+	}
+
+	public int getVMaxima() {
+	    return _vMaxima;
+	}
+
+	public int getVActual() {
+	    return _vActual;
+	}
+
+	public VehicleStatus getStatus() {
+	    return _status;
+	}
+
+	public Road getCarretera() {
+	    return _carretera;
+	}
+
+	public int getPos() {
+	    return _pos;
+	}
+
+	public int getContClass() {
+	    return _contClass;
+	}
+
+	public int getContamAcum() {
+	    return _contamAcum;
+	}
+
+	public int getDist() {
+	    return _dist;
+	}
+
+	public int getCurrentJunction() {
+	    return _currentJunction;
 	}
 		
 	public void setSpeed (int s) throws Exception {
@@ -69,12 +111,12 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 		}
 	}
 	
-	public void moveToNextRoad() {
+	public void moveToNextRoad() throws Exception {
 		if(this._status != VehicleStatus.PENDING && this._status != VehicleStatus.WAITING) 
 			throw new Exception ("Estado del coche no correspondiente");
 		
 		else {
-			if(this._carretera != null) this._carretera.exit();
+			if(this._carretera != null) this._carretera.exit(this);
 			else if(this._currentJunction == this._itinerary.size() - 1) {
 				this._status = VehicleStatus.ARRIVED;
 				this._carretera = null;
@@ -84,6 +126,7 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 				//añadir coche a la siguiente carretera del itinerario
 				this._currentJunction++;
 				this._pos = 0;
+				this._vActual = 0;
 				this._status = VehicleStatus.TRAVELING;
 			}
 		}

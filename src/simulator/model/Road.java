@@ -1,18 +1,19 @@
 package simulator.model;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 abstract public class Road extends SimulatedObject{
-	private Junction _origin;
-	private Junction _destiny;
-	private int _length;
-	private int _maxVel;
-	private int _limVel;
-	private int _limCont;
-	private int _contAcum;
-	private List<Vehicle> _listaCoches;
-	private Weather _weatherReport;
+	protected Junction _origin;
+	protected Junction _destiny;
+	protected int _length;
+	protected int _maxVel;
+	protected int _limVel;
+	protected int _limCont;
+	protected int _contAcum;
+	protected List<Vehicle> _listaCoches;
+	protected Weather _weatherReport;
 	
 	
 	Road(String id, Junction srcJunc, Junction destJunc, int maxSpeed, int contLimit, int length, Weather weather) {
@@ -39,7 +40,7 @@ abstract public class Road extends SimulatedObject{
 		return _destiny;
 	}
 
-	public int get_length() {
+	public int getLength() {
 		return _length;
 	}
 
@@ -60,11 +61,16 @@ abstract public class Road extends SimulatedObject{
 	}
 
 	public List<Vehicle> get_listaCoches() {
-		return _listaCoches;
+		return Collections.unmodifiableList(this._listaCoches);
 	}
 
 	public Weather get_weatherReport() {
 		return _weatherReport;
+	}
+	
+	public void set_weatherReport(Weather weather) throws Exception{
+		if (weather == null) throw new Exception ("Invalid weather");
+		this._weatherReport = weather;
 	}
 	
 	public void enter(Vehicle v) throws Exception{
@@ -72,7 +78,7 @@ abstract public class Road extends SimulatedObject{
 		this._listaCoches.addLast(v);
 	}
 	
-	public void exit(Vehicle v) throws Exception{
+	public void exit(Vehicle v){
 		this._listaCoches.remove(v);
 	}
 	

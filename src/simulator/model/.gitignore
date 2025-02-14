@@ -8,3 +8,6 @@
 /Vehicle.class
 /VehicleStatus.class
 /Weather.class
+/cityRoad.class
+/InterCityRoad.class
+/CityRoad.class
