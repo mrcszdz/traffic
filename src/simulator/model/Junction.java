@@ -1,5 +1,7 @@
 package simulator.model;
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,32 @@ public class Junction extends SimulatedObject implements DequeuingStrategy{
 		  _y = yCoor;
 	}
 
+	public void addIncomingRoad(Road r) throws Exception{
+		if(r.get_destiny() != this) throw new Exception("Carretera mal");
+		else {
+			List<Vehicle> listaVehicle = new LinkedList<Vehicle>();
+			this._inRoads.add(r);
+			this._queues.add(listaVehicle);
+			this._queueByRoad.put(r, listaVehicle);
+		}
+	}
+	
+	public void addOutgoingRoad(Road r) throws Exception{
+		if(r.get_origin() != this) throw new Exception("Carretera mal");
+		else {
+			this._outRoadByJunction.put(r._destiny, r);
+		}
+	}
+	
+	public void entrar(Vehicle v) {
+		this._queueByRoad.get(v.getCarretera()).add(v);
+	}
+	
+	public Road roadTo(Junction j) {
+		return this._outRoadByJunction.get(j);
+	}
+	
+	
 	@Override
 	public List<Vehicle> dequeue(List<Vehicle> q) {
 		// TODO Auto-generated method stub
@@ -41,8 +69,30 @@ public class Junction extends SimulatedObject implements DequeuingStrategy{
 
 	@Override
 	void advance(int time) {
+		int green = this._greenLightIndex;
 		// TODO Auto-generated method stub
-		
+		if(green != -1) {
+			Road greenRoad = this._inRoads.get(green);
+			List<Vehicle> listRoad = this._queueByRoad.get(greenRoad);
+			List<Vehicle> l = this._dqs.dequeue(listRoad);
+			
+			Iterator<Vehicle> lIterator = l.iterator();
+			while(lIterator.hasNext()) {
+				try {
+					Vehicle coche = lIterator.next();
+					coche.moveToNextRoad();
+					listRoad.remove(coche);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.getMessage();
+				}
+			}
+			int nextGreen = this._lss.chooseNextGreen(_inRoads, _queues, green, time, time);
+			if(green != nextGreen) {
+				this._greenLightIndex = nextGreen;
+				this._lastSwitchingTime = 0;
+			};
+		}
 	}
 
 	@Override

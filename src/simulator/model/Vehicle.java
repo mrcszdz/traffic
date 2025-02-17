@@ -117,13 +117,13 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 		
 		else {
 			if(this._carretera != null) this._carretera.exit(this);
-			else if(this._currentJunction == this._itinerary.size() - 1) {
+			if(this._currentJunction == this._itinerary.size() - 1) {
 				this._status = VehicleStatus.ARRIVED;
 				this._carretera = null;
 				this._vActual = 0;
 			}
 			else {
-				//añadir coche a la siguiente carretera del itinerario
+				this._itinerary.get(this._currentJunction).entrar(this);
 				this._currentJunction++;
 				this._pos = 0;
 				this._vActual = 0;

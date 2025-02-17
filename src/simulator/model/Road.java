@@ -76,7 +76,7 @@ abstract public class Road extends SimulatedObject{
 	
 	public void enter(Vehicle v) throws Exception{
 		if(v.getVActual() != 0 || v.getPos() != 0) throw new Exception("Coche que no toca");
-		this._listaCoches.addLast(v);
+		this._listaCoches.add(v);
 	}
 	
 	public void exit(Vehicle v){
