@@ -11,3 +11,5 @@
 /cityRoad.class
 /InterCityRoad.class
 /CityRoad.class
+/MoveFirstStrategy.class
+/MoveAllStrategy.class

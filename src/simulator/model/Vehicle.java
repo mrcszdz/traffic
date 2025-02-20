@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.json.JSONObject;
+
 public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	private List<Junction> _itinerary;
 	private int _vMaxima;
@@ -99,6 +101,8 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 				this._pos = length;
 				this._status = VehicleStatus.WAITING;
 				this._vActual = 0;
+				this._currentJunction++;
+				this._itinerary.get(this._currentJunction).enter(this);
 			}
 			else {
 				distAux = posAux - this._pos;
@@ -107,7 +111,6 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 			
 			contAux = this._contClass * distAux;
 			this._contamAcum += contAux;
-			
 		}
 	}
 	
@@ -117,25 +120,35 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 		
 		else {
 			if(this._carretera != null) this._carretera.exit(this);
-			else if(this._currentJunction == this._itinerary.size() - 1) {
+			if(this._currentJunction == this._itinerary.size() - 1) {
 				this._status = VehicleStatus.ARRIVED;
 				this._carretera = null;
 				this._vActual = 0;
 			}
 			else {
-				//añadir coche a la siguiente carretera del itinerario
+				this._carretera = this._itinerary.get(this._currentJunction).get_outRoadByJunction().get(this._itinerary.get(this._currentJunction + 1));
 				this._currentJunction++;
 				this._pos = 0;
 				this._vActual = 0;
-				this._status = VehicleStatus.TRAVELING;
+				this._status = VehicleStatus.TRAVELING;		
 			}
 		}
 	}
 
 	@Override
 	public JSONObject report() {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject jcar = new JSONObject();
+		jcar.put("id", String.format("v", this._id));
+		jcar.put("speed", this._vActual);
+		jcar.put("distance", this._dist);
+		jcar.put("co2", this._contamAcum);
+		jcar.put("class", this._contClass);
+		jcar.put("status", this._status);
+		if(this._status != VehicleStatus.PENDING || this._status != VehicleStatus.WAITING) {
+		jcar.put("road", this._carretera);
+		jcar.put("location", this._pos);
+		}
+		return jcar;
 	}
 
 	@Override

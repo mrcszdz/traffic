@@ -11,7 +11,8 @@ public class CityRoad extends Road {
 		if(this.get_weatherReport() == Weather.WINDY || this.get_weatherReport() == Weather.STORM) {
 			this._contAcum -= 10;
 		}
-		
+		else this._contAcum -= 2;
+		if(this._contAcum < 0) this._contAcum = 0;
 	}
 
 	@Override
@@ -22,14 +23,12 @@ public class CityRoad extends Road {
 
 	@Override
 	public void calculateVehicleSpeed(Vehicle v) {
-		// TODO Auto-generated method stub
-		
+		int speed;
+		speed = ((11-v.getContClass())*this._limVel)/11;
+		try {
+			v.setSpeed(speed);
+		} catch (Exception e) {
+			e.getMessage();
+		}
 	}
-
-	@Override
-	public JSONObject report() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

@@ -1,5 +1,9 @@
 package simulator.model;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -19,8 +23,13 @@ abstract public class Road extends SimulatedObject{
 	Road(String id, Junction srcJunc, Junction destJunc, int maxSpeed, int contLimit, int length, Weather weather) {
 		  super(id);
 		  //Tiene que llamar a addIncomingRoad y a addOutgoingRoad de sus correspondientes Junctions
-		  //srcJunc.addIncomingRoad(this)
-		  //destJunc.addOutcomingRoad(this)
+		  try {
+			srcJunc.addIncomingRoad(this);
+		  destJunc.addOutgoingRoad(this);
+		  } catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.getMessage();
+			}
 		  this._origin = srcJunc;
 		  this._destiny = destJunc;
 		  this._length = length;
@@ -94,6 +103,21 @@ abstract public class Road extends SimulatedObject{
 		this._listaCoches.sort(null);
 	}
 	
+	@Override
+	public JSONObject report() {
+		JSONObject jroad = new JSONObject();
+		jroad.put("id", this._id);
+		jroad.put("speedlimit", this._limVel);
+		jroad.put("weather", this._weatherReport);
+		jroad.put("co2", this._contAcum);
+		jroad.put("vehicles", this._id);
+		JSONArray ja = new JSONArray();
+		ja.put(this._listaCoches);
+		jroad.put("vehicles",ja);
+		
+		return jroad;
+	}
+
 	abstract public void reduceTotalContamination();
 	abstract public void updateSpeedLimit();
 	abstract public void calculateVehicleSpeed(Vehicle v);
