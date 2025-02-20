@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+<<<<<<< HEAD
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+=======
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+>>>>>>> 32fc6f9f16e8334f1ab26a3f27b5f4122ad4195a
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path=""/>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="C:/Users/Marcos Sanchez/Documents/GitHub/traffic/lib/lib/commons-cli-1.4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Marcos Sanchez/Documents/GitHub/traffic/lib/lib/json.jar"/>
+=======
+	<classpathentry kind="lib" path="C:/Users/usuario_local/Documents/GitHub/traffic/lib/lib/commons-cli-1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/usuario_local/Documents/GitHub/traffic/lib/lib/json.jar"/>
+>>>>>>> 32fc6f9f16e8334f1ab26a3f27b5f4122ad4195a
 	<classpathentry kind="output" path=""/>
 </classpath>

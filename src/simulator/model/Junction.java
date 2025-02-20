@@ -46,6 +46,31 @@ public class Junction extends SimulatedObject{
 			this._queues.add(listaVehicle);
 			this._queueByRoad.put(r, listaVehicle);
 		}
+<<<<<<< HEAD
+=======
+	}
+	
+	public void addOutgoingRoad(Road r) throws Exception{
+		if(r.get_origin() != this) throw new Exception("Carretera mal");
+		else {
+			this._outRoadByJunction.put(r._destiny, r);
+		}
+	}
+	
+	public void entrar(Vehicle v) {
+		this._queueByRoad.get(v.getCarretera()).add(v);
+	}
+	
+	public Road roadTo(Junction j) {
+		return this._outRoadByJunction.get(j);
+	}
+	
+	
+	@Override
+	public List<Vehicle> dequeue(List<Vehicle> q) {
+		// TODO Auto-generated method stub
+		return null;
+>>>>>>> 32fc6f9f16e8334f1ab26a3f27b5f4122ad4195a
 	}
 	
 	public int get_x() {

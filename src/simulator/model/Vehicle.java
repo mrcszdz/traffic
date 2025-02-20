@@ -17,6 +17,7 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	private int _contamAcum;
 	private int _dist;
 	private int _currentJunction;
+	static int cont = 0;
 	
 	Vehicle(String id, int maxSpeed, int contClass, List<Junction> itinerary) throws Exception {
 		  super(id);
@@ -36,6 +37,7 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 			this._dist = 0;
 			this._itinerary = Collections.unmodifiableList(new ArrayList<>(itinerary));
 			this._currentJunction = 0;
+			cont++;
 	}
 	
 	public List<Junction> getItinerary() {
@@ -126,7 +128,11 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 				this._vActual = 0;
 			}
 			else {
+<<<<<<< HEAD
 				this._carretera = this._itinerary.get(this._currentJunction).get_outRoadByJunction().get(this._itinerary.get(this._currentJunction + 1));
+=======
+				this._itinerary.get(this._currentJunction).entrar(this);
+>>>>>>> 32fc6f9f16e8334f1ab26a3f27b5f4122ad4195a
 				this._currentJunction++;
 				this._pos = 0;
 				this._vActual = 0;
@@ -137,18 +143,32 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 
 	@Override
 	public JSONObject report() {
+<<<<<<< HEAD
 		JSONObject jcar = new JSONObject();
 		jcar.put("id", String.format("v", this._id));
+=======
+		// TODO Auto-generated method stub
+		JSONObject jcar = new JSONObject();
+		jcar.put("id", String.format("v", cont));
+>>>>>>> 32fc6f9f16e8334f1ab26a3f27b5f4122ad4195a
 		jcar.put("speed", this._vActual);
 		jcar.put("distance", this._dist);
 		jcar.put("co2", this._contamAcum);
 		jcar.put("class", this._contClass);
+<<<<<<< HEAD
 		jcar.put("status", this._status);
 		if(this._status != VehicleStatus.PENDING || this._status != VehicleStatus.WAITING) {
 		jcar.put("road", this._carretera);
 		jcar.put("location", this._pos);
 		}
 		return jcar;
+=======
+		jcar.put("status", this._);
+		jcar.put("speed", this._vActual);
+		jcar.put("speed", this._vActual);
+		
+		return null;
+>>>>>>> 32fc6f9f16e8334f1ab26a3f27b5f4122ad4195a
 	}
 
 	@Override

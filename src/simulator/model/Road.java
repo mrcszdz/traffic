@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 abstract public class Road extends SimulatedObject{
@@ -84,7 +85,7 @@ abstract public class Road extends SimulatedObject{
 	
 	public void enter(Vehicle v) throws Exception{
 		if(v.getVActual() != 0 || v.getPos() != 0) throw new Exception("Coche que no toca");
-		this._listaCoches.addLast(v);
+		this._listaCoches.add(v);
 	}
 	
 	public void exit(Vehicle v){
@@ -100,7 +101,8 @@ abstract public class Road extends SimulatedObject{
 			this.calculateVehicleSpeed(it.next());
 			it.next().advance(time);
 		}
-		this._listaCoches.sort(null);
+//		this._listaCoches.sort(Comparator<Vehicle>);
+		Collections.sort(_listaCoches); 
 	}
 	
 	@Override
