@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.json.JSONObject;
+
 public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	private List<Junction> _itinerary;
 	private int _vMaxima;
@@ -15,6 +17,7 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	private int _contamAcum;
 	private int _dist;
 	private int _currentJunction;
+	static int cont = 0;
 	
 	Vehicle(String id, int maxSpeed, int contClass, List<Junction> itinerary) throws Exception {
 		  super(id);
@@ -34,6 +37,7 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 			this._dist = 0;
 			this._itinerary = Collections.unmodifiableList(new ArrayList<>(itinerary));
 			this._currentJunction = 0;
+			cont++;
 	}
 	
 	public List<Junction> getItinerary() {
@@ -135,6 +139,16 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	@Override
 	public JSONObject report() {
 		// TODO Auto-generated method stub
+		JSONObject jcar = new JSONObject();
+		jcar.put("id", String.format("v", cont));
+		jcar.put("speed", this._vActual);
+		jcar.put("distance", this._dist);
+		jcar.put("co2", this._contamAcum);
+		jcar.put("class", this._contClass);
+		jcar.put("status", this._);
+		jcar.put("speed", this._vActual);
+		jcar.put("speed", this._vActual);
+		
 		return null;
 	}
 
