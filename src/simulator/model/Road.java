@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 
 abstract public class Road extends SimulatedObject{
@@ -24,13 +23,6 @@ abstract public class Road extends SimulatedObject{
 	Road(String id, Junction srcJunc, Junction destJunc, int maxSpeed, int contLimit, int length, Weather weather) {
 		  super(id);
 		  //Tiene que llamar a addIncomingRoad y a addOutgoingRoad de sus correspondientes Junctions
-		  try {
-			srcJunc.addIncomingRoad(this);
-		  destJunc.addOutgoingRoad(this);
-		  } catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.getMessage();
-			}
 		  this._origin = srcJunc;
 		  this._destiny = destJunc;
 		  this._length = length;
@@ -40,8 +32,22 @@ abstract public class Road extends SimulatedObject{
 		  this._contAcum = 0;
 		  this._listaCoches = new ArrayList<Vehicle>();
 		  this._weatherReport = weather;
+		  
+		  try {
+			  destJunc.addIncomingRoad(this);
+			  srcJunc.addOutgoingRoad(this);
+		  } catch (Exception e) {
+			  // TODO Auto-generated catch block
+			  e.getMessage();
+		  }
 		}
 
+	
+	public List<Vehicle> getVehicles(){
+		return _listaCoches;
+	}
+	
+	
 	public Junction get_origin() {
 		return _origin;
 	}
@@ -84,8 +90,8 @@ abstract public class Road extends SimulatedObject{
 	}
 	
 	public void enter(Vehicle v) throws Exception{
-		if(v.getVActual() != 0 || v.getPos() != 0) throw new Exception("Coche que no toca");
-		this._listaCoches.add(v);
+		if(v.getSpeed() != 0 || v.getLocation() != 0) throw new Exception("Coche que no toca");
+		this._listaCoches.addLast(v);
 	}
 	
 	public void exit(Vehicle v){
@@ -97,12 +103,13 @@ abstract public class Road extends SimulatedObject{
 		this.reduceTotalContamination();
 		this.updateSpeedLimit();
 		Iterator<Vehicle> it = this._listaCoches.iterator();
+		
 		while(it.hasNext()) {
-			this.calculateVehicleSpeed(it.next());
-			it.next().advance(time);
+			Vehicle vehAux = it.next();
+			this.calculateVehicleSpeed(vehAux);
+			vehAux.advance(time);
 		}
-//		this._listaCoches.sort(Comparator<Vehicle>);
-		Collections.sort(_listaCoches); 
+		this._listaCoches.sort(null);
 	}
 	
 	@Override

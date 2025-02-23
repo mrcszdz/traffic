@@ -17,15 +17,14 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	private int _contamAcum;
 	private int _dist;
 	private int _currentJunction;
-	static int cont = 0;
 	
-	Vehicle(String id, int maxSpeed, int contClass, List<Junction> itinerary) throws Exception {
+	Vehicle(String id, int maxSpeed, int contClass, List<Junction> itinerary) throws IllegalArgumentException {
 		  super(id);
-		  if(maxSpeed < 0) throw new Exception("Velocidad maxima negativa");
+		  if(maxSpeed <= 0) throw new IllegalArgumentException("Velocidad maxima negativa");
 		 
-		  else if(0 > _contClass || _contClass > 10) throw new Exception("Contaminacion invalida");
+		  if(0 > contClass || contClass > 10)throw new IllegalArgumentException("Velocidad maxima negativa");
 		 
-		  else if (_itinerary.size() < 2) throw new Exception("Itinerario invalido");
+		  if (itinerary.size() < 2) throw new IllegalArgumentException("Velocidad maxima negativa");
 		  
 		  this._vMaxima = maxSpeed;
 			this._vActual = 0;
@@ -37,7 +36,6 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 			this._dist = 0;
 			this._itinerary = Collections.unmodifiableList(new ArrayList<>(itinerary));
 			this._currentJunction = 0;
-			cont++;
 	}
 	
 	public List<Junction> getItinerary() {
@@ -48,19 +46,19 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	    return _vMaxima;
 	}
 
-	public int getVActual() {
+	public int getSpeed() {
 	    return _vActual;
 	}
-
+	
 	public VehicleStatus getStatus() {
 	    return _status;
 	}
 
-	public Road getCarretera() {
+	public Road getRoad() {
 	    return _carretera;
 	}
 
-	public int getPos() {
+	public int getLocation() {
 	    return _pos;
 	}
 
@@ -68,7 +66,7 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	    return _contClass;
 	}
 
-	public int getContamAcum() {
+	public int getTotalCO2() {
 	    return _contamAcum;
 	}
 
@@ -80,14 +78,16 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	    return _currentJunction;
 	}
 		
-	public void setSpeed (int s) throws Exception {
-		if(s < 0) throw new Exception ("Velocidad no valida");
-		else if(s >= this._vMaxima) this._vActual = this._vMaxima;
-		else this._vActual = s;
+	public void setSpeed (int s) throws IllegalArgumentException {
+		if(this._status== VehicleStatus.TRAVELING) {
+			if(s < 0) throw new IllegalArgumentException ("Velocidad no valida");
+			else if(s >= this._vMaxima) this._vActual = this._vMaxima;
+			else this._vActual = s;
+		}
 	}
 	
-	public void setContaminationClass(int c) throws Exception {
-		if(0 > _contClass || _contClass > 10) throw new Exception("Contaminacion invalida");
+	public void setContClass(int c) throws IllegalArgumentException {
+		if(0 > c || c > 10) throw new IllegalArgumentException("Contaminacion invalida");
 		else this._contClass = c;
 	}
 	
@@ -98,6 +98,7 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 			int length = this._carretera.getLength();
 			int distAux;
 			int contAux;
+			this._dist = this._dist + this._vActual;
 			if(posAux >= length) {
 				distAux = length - this._pos;
 				this._pos = length;
@@ -116,9 +117,9 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 		}
 	}
 	
-	public void moveToNextRoad() throws Exception {
+	public void moveToNextRoad() throws IllegalArgumentException {
 		if(this._status != VehicleStatus.PENDING && this._status != VehicleStatus.WAITING) 
-			throw new Exception ("Estado del coche no correspondiente");
+			throw new IllegalArgumentException ("Estado del coche no correspondiente");
 		
 		else {
 			if(this._carretera != null) this._carretera.exit(this);
@@ -128,11 +129,13 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 				this._vActual = 0;
 			}
 			else {
-<<<<<<< HEAD
 				this._carretera = this._itinerary.get(this._currentJunction).get_outRoadByJunction().get(this._itinerary.get(this._currentJunction + 1));
-=======
-				this._itinerary.get(this._currentJunction).entrar(this);
->>>>>>> 32fc6f9f16e8334f1ab26a3f27b5f4122ad4195a
+				try {
+					this._carretera.enter(this);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.getMessage();
+				}
 				this._currentJunction++;
 				this._pos = 0;
 				this._vActual = 0;
@@ -143,32 +146,18 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 
 	@Override
 	public JSONObject report() {
-<<<<<<< HEAD
 		JSONObject jcar = new JSONObject();
-		jcar.put("id", String.format("v", this._id));
-=======
-		// TODO Auto-generated method stub
-		JSONObject jcar = new JSONObject();
-		jcar.put("id", String.format("v", cont));
->>>>>>> 32fc6f9f16e8334f1ab26a3f27b5f4122ad4195a
+		jcar.put("id", this.getId());
 		jcar.put("speed", this._vActual);
 		jcar.put("distance", this._dist);
 		jcar.put("co2", this._contamAcum);
 		jcar.put("class", this._contClass);
-<<<<<<< HEAD
-		jcar.put("status", this._status);
-		if(this._status != VehicleStatus.PENDING || this._status != VehicleStatus.WAITING) {
-		jcar.put("road", this._carretera);
-		jcar.put("location", this._pos);
+		jcar.put("status", this._status.toString());
+		if(this._status != VehicleStatus.PENDING && this._status != VehicleStatus.WAITING && this._carretera != null) {
+			jcar.put("road", this._carretera.getId());
+			jcar.put("location", this._pos);
 		}
 		return jcar;
-=======
-		jcar.put("status", this._);
-		jcar.put("speed", this._vActual);
-		jcar.put("speed", this._vActual);
-		
-		return null;
->>>>>>> 32fc6f9f16e8334f1ab26a3f27b5f4122ad4195a
 	}
 
 	@Override
