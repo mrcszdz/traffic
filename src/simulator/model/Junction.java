@@ -31,9 +31,13 @@ public class Junction extends SimulatedObject{
 
 	private DequeuingStrategy _dqs;
 	
-	public Junction(String id, LightSwitchingStrategy lsStrategy, DequeuingStrategy dqStrategy, int xCoor, int yCoor) {
+	public Junction(String id, LightSwitchingStrategy lsStrategy, DequeuingStrategy dqStrategy, int xCoor, int yCoor) throws IllegalArgumentException{
 		  super(id);
 		  
+		  if(lsStrategy == null) throw new IllegalArgumentException();
+		  if(dqStrategy == null) throw new IllegalArgumentException();
+		  if(xCoor < 0 || yCoor < 0) throw new IllegalArgumentException();
+				  
 		  _lss = lsStrategy;
 		  _dqs = dqStrategy;
 		  _x = xCoor;

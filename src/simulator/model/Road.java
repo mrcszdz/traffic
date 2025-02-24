@@ -20,9 +20,16 @@ abstract public class Road extends SimulatedObject{
 	protected Weather _weatherReport;
 	
 	
-	Road(String id, Junction srcJunc, Junction destJunc, int maxSpeed, int contLimit, int length, Weather weather) {
+	Road(String id, Junction srcJunc, Junction destJunc, int maxSpeed, int contLimit, int length, Weather weather)throws IllegalArgumentException {
 		  super(id);
-		  //Tiene que llamar a addIncomingRoad y a addOutgoingRoad de sus correspondientes Junctions
+		  
+		  if(maxSpeed <= 0) throw new IllegalArgumentException();
+		  if(contLimit < 0) throw new IllegalArgumentException();
+		  if(length <= 0) throw new IllegalArgumentException();
+		  if(weather == null) throw new IllegalArgumentException();
+		  
+		  
+		  
 		  this._origin = srcJunc;
 		  this._destiny = destJunc;
 		  this._length = length;
@@ -44,7 +51,7 @@ abstract public class Road extends SimulatedObject{
 
 	
 	public List<Vehicle> getVehicles(){
-		return _listaCoches;
+		return Collections.unmodifiableList(_listaCoches);
 	}
 	
 	
@@ -116,10 +123,13 @@ abstract public class Road extends SimulatedObject{
 		JSONObject jroad = new JSONObject();
 		jroad.put("id", this._id);
 		jroad.put("speedlimit", this._limVel);
-		jroad.put("weather", this._weatherReport);
+		jroad.put("weather", this._weatherReport.name());
 		jroad.put("co2", this._contAcum);
 		JSONArray ja = new JSONArray();
-		ja.put(this._listaCoches);
+		Iterator<Vehicle> it = this._listaCoches.iterator();
+		while(it.hasNext()) {
+			ja.put(it.next().getId());
+		}
 		jroad.put("vehicles",ja);
 		return jroad;
 	}

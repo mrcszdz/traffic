@@ -12,17 +12,19 @@ public class InterCityRoad extends Road {
 	public void reduceTotalContamination() {
 		int x = 20;
 		switch(this._weatherReport) {
-		case Weather.SUNNY:
+		case SUNNY:
 			x = 2;
 			break;
-		case Weather.CLOUDY:
+		case CLOUDY:
 			x = 3;
 			break;
-		case Weather.RAINY:
+		case RAINY:
 			x = 10;
 			break;
-		case Weather.WINDY:
+		case WINDY:
 			x = 15;
+			break;
+		default:
 			break;
 		}
 		this._contAcum = ((100-x)*this._contAcum)/100;
