@@ -114,6 +114,7 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 			
 			contAux = this._contClass * distAux;
 			this._contamAcum += contAux;
+			this._carretera.addContamination(contAux);
 		}
 	}
 	
@@ -162,8 +163,8 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 
 	@Override
 	public int compareTo(Vehicle o) {
-		if(this._pos > o._pos) return 1;
-		else if(this._pos < o._pos) return -1;
+		if(this._pos > o._pos) return -1;
+		else if(this._pos < o._pos) return 1;
 		return 0;
 	}
 }

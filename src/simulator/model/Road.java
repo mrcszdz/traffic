@@ -100,16 +100,15 @@ abstract public class Road extends SimulatedObject{
 	
 	@Override
 	public void advance(int time){
-		this.reduceTotalContamination();
 		this.updateSpeedLimit();
 		Iterator<Vehicle> it = this._listaCoches.iterator();
-		
+		this.reduceTotalContamination();		
 		while(it.hasNext()) {
 			Vehicle vehAux = it.next();
 			this.calculateVehicleSpeed(vehAux);
 			vehAux.advance(time);
 		}
-		this._listaCoches.sort(null);
+		Collections.sort(this._listaCoches); 
 	}
 	
 	@Override
@@ -119,12 +118,15 @@ abstract public class Road extends SimulatedObject{
 		jroad.put("speedlimit", this._limVel);
 		jroad.put("weather", this._weatherReport);
 		jroad.put("co2", this._contAcum);
-		jroad.put("vehicles", this._id);
 		JSONArray ja = new JSONArray();
 		ja.put(this._listaCoches);
 		jroad.put("vehicles",ja);
-		
 		return jroad;
+	}
+	
+	public void addContamination(int c) throws IllegalArgumentException{
+		if(c < 0) throw new IllegalArgumentException("Coche que no toca");
+		this._contAcum = this._contAcum + c;
 	}
 
 	abstract public void reduceTotalContamination();

@@ -20,7 +20,7 @@ class CityRoadTest {
 		// a road
 		Road r1 = new CityRoad("r1", j1, j2, 100, 500, 1000, Weather.SUNNY);
 
-		// src/dest
+		// Sr/zest
 		assertEquals(j1, r1.getSrc());
 		assertEquals(j2, r1.getDest());
 
@@ -80,7 +80,7 @@ class CityRoadTest {
 		assertEquals(50, v1.getSpeed());
 		assertEquals(72, v2.getSpeed());
 
-		// check correctness of totoal co2
+		// check correctness of total co2
 		assertEquals(266, r1.getTotalCO2());
 		assertEquals(50, v1.getTotalCO2());
 		assertEquals(216, v2.getTotalCO2());
@@ -92,7 +92,7 @@ class CityRoadTest {
 		assertEquals(50, v1.getSpeed());
 		assertEquals(72, v2.getSpeed());
 
-		// check correctness of totoal co2
+		// check correctness of total co2
 		assertEquals(522, r1.getTotalCO2());
 		assertEquals(100, v1.getTotalCO2());
 		assertEquals(432, v2.getTotalCO2());
@@ -117,7 +117,7 @@ class CityRoadTest {
 		v2.moveToNextRoad();
 
 		String s = "{\"speedlimit\":100,\"co2\":0,\"weather\":\"SUNNY\",\"vehicles\":[\"v1\",\"v2\"],\"id\":\"r1\"}";
-
+		r1.report();
 		assertTrue(new JSONObject(s).similar(r1.report()));
 
 		r1.advance(1);
