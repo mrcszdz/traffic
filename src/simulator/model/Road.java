@@ -48,11 +48,11 @@ abstract public class Road extends SimulatedObject{
 	}
 	
 	
-	public Junction get_origin() {
+	public Junction getSrc() {
 		return _origin;
 	}
 
-	public Junction get_destiny() {
+	public Junction getDest() {
 		return _destiny;
 	}
 
@@ -60,19 +60,19 @@ abstract public class Road extends SimulatedObject{
 		return _length;
 	}
 
-	public int get_maxVel() {
+	public int getMaxSpeed() {
 		return _maxVel;
 	}
 
-	public int get_limVel() {
+	public int getSpeedLimit() {
 		return _limVel;
 	}
 
-	public int get_limCont() {
+	public int getContLimit() {
 		return _limCont;
 	}
 
-	public int get_contAcum() {
+	public int getTotalCO2() {
 		return _contAcum;
 	}
 
@@ -80,18 +80,18 @@ abstract public class Road extends SimulatedObject{
 		return Collections.unmodifiableList(this._listaCoches);
 	}
 
-	public Weather get_weatherReport() {
+	public Weather getWeather() {
 		return _weatherReport;
 	}
 	
-	public void set_weatherReport(Weather weather) throws Exception{
-		if (weather == null) throw new Exception ("Invalid weather");
+	public void setWeather(Weather weather) throws IllegalArgumentException{
+		if (weather == null) throw new IllegalArgumentException ("Invalid weather");
 		this._weatherReport = weather;
 	}
 	
-	public void enter(Vehicle v) throws Exception{
-		if(v.getSpeed() != 0 || v.getLocation() != 0) throw new Exception("Coche que no toca");
-		this._listaCoches.addLast(v);
+	public void enter(Vehicle v) throws IllegalArgumentException{
+		if(v.getSpeed() != 0 || v.getLocation() != 0) throw new IllegalArgumentException("Coche que no toca");
+		this._listaCoches.add(v);
 	}
 	
 	public void exit(Vehicle v){

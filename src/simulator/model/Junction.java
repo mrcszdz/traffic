@@ -46,7 +46,7 @@ public class Junction extends SimulatedObject{
 	}
 
 	public void addIncomingRoad(Road r) throws IllegalArgumentException{
-		if(r.get_destiny() != this) throw new IllegalArgumentException("Carretera mal");
+		if(r.getDest() != this) throw new IllegalArgumentException("Carretera mal");
 		else {
 			List<Vehicle> listaVehicle = new LinkedList<Vehicle>();
 			this._inRoads.add(r);
@@ -96,7 +96,7 @@ public class Junction extends SimulatedObject{
 	}
 	
 	public void addOutgoingRoad(Road r) throws IllegalArgumentException{
-		if(r.get_origin() != this) throw new IllegalArgumentException("Carretera mal");
+		if(r.getSrc() != this) throw new IllegalArgumentException("Carretera mal");
 		else {
 			this._outRoadByJunction.put(r._destiny, r);
 		}

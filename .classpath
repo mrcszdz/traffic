@@ -6,7 +6,8 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="U:/hlocal/traffic/lib/lib/commons-cli-1.4.jar"/>
-	<classpathentry kind="lib" path="U:/hlocal/traffic/lib/lib/json.jar"/>
+	<classpathentry kind="lib" path="C:/Users/usuario_local/Documents/GitHub/traffic/lib/lib/commons-cli-1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/usuario_local/Documents/GitHub/traffic/lib/lib/json.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -8,7 +8,7 @@ public class CityRoad extends Road {
 
 	@Override
 	public void reduceTotalContamination() {
-		if(this.get_weatherReport() == Weather.WINDY || this.get_weatherReport() == Weather.STORM) {
+		if(this.getWeather() == Weather.WINDY || this.getWeather() == Weather.STORM) {
 			this._contAcum -= 10;
 		}
 		else this._contAcum -= 2;
