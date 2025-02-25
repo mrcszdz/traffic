@@ -1,0 +1,105 @@
+package simulator.model;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.json.JSONObject;
+
+public class Junction extends SimulatedObject implements DequeuingStrategy{
+	private int _x;
+	
+	private int _y;
+	
+	List<Road> _inRoads;
+
+	List<List<Vehicle>> _queues; // the i-th queue corresponds to the i-th road in _inRoads
+
+	Map<Road, List<Vehicle>> _queueByRoad; // for efficient lookup of queues
+
+	Map<Junction, Road> _outRoadByJunction; // indicates the road to take to reach a given junction
+
+	int _greenLightIndex; // the index of the road in _inRoads that has a green light (-1 if all lights are red)
+
+	int _lastSwitchingTime; // the last time the green light was switched from one road to another
+
+	LightSwitchingStrategy _lss;
+
+	DequeuingStrategy _dqs;
+	
+	Junction(String id, LightSwitchStrategy lsStrategy, DequeingStrategy dqStrategy, int xCoor, int yCoor) {
+		  super(id);
+		  
+		  _lss = lsStrategy;
+		  _dqs = dqStrategy;
+		  _x = xCoor;
+		  _y = yCoor;
+	}
+
+	public void addIncomingRoad(Road r) throws Exception{
+		if(r.get_destiny() != this) throw new Exception("Carretera mal");
+		else {
+			List<Vehicle> listaVehicle = new LinkedList<Vehicle>();
+			this._inRoads.add(r);
+			this._queues.add(listaVehicle);
+			this._queueByRoad.put(r, listaVehicle);
+		}
+	}
+	
+	public void addOutgoingRoad(Road r) throws Exception{
+		if(r.get_origin() != this) throw new Exception("Carretera mal");
+		else {
+			this._outRoadByJunction.put(r._destiny, r);
+		}
+	}
+	
+	public void enter(Vehicle v) {
+		this._queueByRoad.get(v.getCarretera()).add(v);
+	}
+	
+	public Road roadTo(Junction j) {
+		return this._outRoadByJunction.get(j);
+	}
+	
+	
+	@Override
+	public List<Vehicle> dequeue(List<Vehicle> q) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	void advance(int time) {
+		int green = this._greenLightIndex;
+		// TODO Auto-generated method stub
+		if(green != -1) {
+			Road greenRoad = this._inRoads.get(green);
+			List<Vehicle> listRoad = this._queueByRoad.get(greenRoad);
+			List<Vehicle> l = this._dqs.dequeue(listRoad);
+			
+			Iterator<Vehicle> lIterator = l.iterator();
+			while(lIterator.hasNext()) {
+				try {
+					Vehicle coche = lIterator.next();
+					coche.moveToNextRoad();
+					listRoad.remove(coche);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.getMessage();
+				}
+			}
+			int nextGreen = this._lss.chooseNextGreen(_inRoads, _queues, green, time, time);
+			if(green != nextGreen) {
+				this._greenLightIndex = nextGreen;
+				this._lastSwitchingTime = 0;
+			};
+		}
+	}
+
+	@Override
+	public JSONObject report() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}
