@@ -42,6 +42,7 @@ public class Junction extends SimulatedObject{
 		  _dqs = dqStrategy;
 		  _x = xCoor;
 		  _y = yCoor;
+		  _greenLightIndex = -1;
 		  _outRoadByJunction = new HashMap<Junction, Road>();
 		  _queueByRoad = new HashMap<Road, List<Vehicle>>();
 		  _inRoads = new ArrayList<Road>();
@@ -149,9 +150,17 @@ public class Junction extends SimulatedObject{
 	public JSONObject report() {
 		JSONObject jjunction = new JSONObject();
 		jjunction.put("id", this._id);
-		jjunction.put("green", this._inRoads.get(this._greenLightIndex));
+		if(this._greenLightIndex == -1) jjunction.put("green", "none");
+		else jjunction.put("green", this._inRoads.get(this._greenLightIndex).getId());
 		JSONArray ja = new JSONArray();
-		ja.put(this._queues);
+		Iterator<Road> itr = this._inRoads.iterator();
+		while(itr.hasNext()) {
+			JSONObject jqueue = new JSONObject();
+			Road road = itr.next();
+			jqueue.put("road", road.getId());
+			jqueue.put("vehicles", this._queueByRoad.get(road));
+			ja.put(jqueue);
+		}
 		jjunction.put("queues", ja);
 		
 		return jjunction;
