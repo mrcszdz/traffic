@@ -15,7 +15,9 @@ public class NewVehicleEvent extends Event{
 	    super(time);
 	    this._id = id;
 	    this._maxSpeed = maxSpeed;
-	    this._contClass = contClass;	    
+	    this._contClass = contClass;	
+	    this._itinerary = new ArrayList<String>();
+	    this._itinerary = itinerary;
 	}
 
 	@Override

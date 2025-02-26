@@ -42,7 +42,7 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 	    return _itinerary;
 	}
 
-	public int getVMaxima() {
+	public int getMaxSpeed() {
 	    return _vMaxima;
 	}
 
