@@ -25,8 +25,8 @@ public class BuilderBasedFactory<T> implements Factory<T> {
     }
 
     public void addBuilder(Builder<T> b) {
-        _builders.put(b.getTypeTag(), b);
-        _buildersInfo.add(b.getInfo());
+        _builders.put(b.get_type_tag(), b);
+        _buildersInfo.add(b.get_info());
     }
 
     @Override
@@ -39,7 +39,7 @@ public class BuilderBasedFactory<T> implements Factory<T> {
         Builder<T> builder = _builders.get(type);
         if (builder!= null) {
             JSONObject data = info.has("data")? info.getJSONObject("data"): new JSONObject();
-            T instance = builder.createInstance(data);
+            T instance = builder.create_instance(data);
             if (instance!= null) {
                 return instance;
             }
