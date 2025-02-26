@@ -138,11 +138,11 @@ public class Junction extends SimulatedObject{
 					e.getMessage();
 				}
 			}
-			int nextGreen = this._lss.chooseNextGreen(_inRoads, _queues, green, time, time);
-			if(green != nextGreen) {
-				this._greenLightIndex = nextGreen;
-				this._lastSwitchingTime = 0;
-			};
+		}
+		int nextGreen = this._lss.chooseNextGreen(_inRoads, _queues, green, time, time);
+		if(green != nextGreen) {
+			this._greenLightIndex = nextGreen;
+			this._lastSwitchingTime = 0;
 		}
 	}
 

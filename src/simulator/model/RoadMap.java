@@ -86,13 +86,13 @@ public RoadMap() {
 		JSONArray ja = new JSONArray();
 		JSONArray ja1 = new JSONArray();
 		JSONArray ja2 = new JSONArray();
-		Iterator<Vehicle> itv = this._vehicles.iterator();
 		Iterator<Road> itr = this._roads.iterator();
 		while(itr.hasNext()) {
 			ja1.put(itr.next().report());
 		}
 		jroad.put("roads",ja1);
 		
+		Iterator<Vehicle> itv = this._vehicles.iterator();
 		while(itv.hasNext()) {
 			ja.put(itv.next().report());
 		}
@@ -104,6 +104,16 @@ public RoadMap() {
 		}
 		jroad.put("junctions",ja2);
 		return jroad;
+	}
+	
+	public void clear() {
+		// TODO Auto-generated method stub
+		this._junctions.clear();
+		this._junctionsMap.clear();
+		this._roads.clear();
+		this._roadsMap.clear();
+		this._vehicles.clear();
+		this._vehiclesMap.clear();
 	}
 	
 }
