@@ -1,9 +1,7 @@
 package simulator.factories;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import org.json.JSONArray;
+
 import org.json.JSONObject;
 
 import simulator.model.Event;
@@ -13,7 +11,7 @@ import simulator.model.NewRoadEvent;
 import simulator.model.NewVehicleEvent;
 import simulator.model.Weather;
 
-public abstract class NewCityRoadEventBuilder extends NewRoadEventBuilder {
+public class NewCityRoadEventBuilder extends NewRoadEventBuilder {
 
     public NewCityRoadEventBuilder() {
         super("new_city_road", "A new city road");

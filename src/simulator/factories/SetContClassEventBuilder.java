@@ -7,9 +7,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import simulator.misc.Pair;
+import simulator.model.Event;
 import simulator.model.SetContClassEvent;
 
-public class SetContClassEventBuilder extends Builder<SetContClassEvent> {
+public class SetContClassEventBuilder extends Builder<Event> {
 
 	public SetContClassEventBuilder() {
 		super("set_cont_class", "SetContClass");

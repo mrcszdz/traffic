@@ -206,6 +206,8 @@ class BuilderBasedFactoryTest {
 				+ "   	  }\n"
 				+ "   	}";
 
+		
+		JSONObject jsonO = new JSONObject(inputJSon);
 		assertTrue( eFactory.create_instance(new JSONObject(inputJSon)) instanceof NewInterCityRoadEvent);
 	}
 
