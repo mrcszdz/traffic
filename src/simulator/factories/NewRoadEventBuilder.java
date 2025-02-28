@@ -37,6 +37,6 @@ public abstract class NewRoadEventBuilder extends Builder<Event> {
 	        this._co2limit = data.getInt("co2limit");
 	        this. _maxspeed = data.getInt("maxspeed");
 	        String WString = data.getString("weather");
-	        this._weather = Weather.valueOf(WString);
+	        this._weather = Weather.valueOf(WString.toUpperCase());
 	 }
 }

@@ -17,4 +17,6 @@ public class RoundRobinStrategyBuilder extends Builder<LightSwitchingStrategy> {
 		int time = data.optInt("timeslot", 1);
 		return new RoundRobinStrategy(time);
 	}
+	
+	
 }

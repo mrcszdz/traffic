@@ -11,11 +11,6 @@ public class MostCrowdedStrategyBuilder extends Builder<LightSwitchingStrategy> 
 		super("most_crowded_lss", "mostCrowdedStrategy");
 		// TODO Auto-generated constructor stub
 	}
-	
-	public MostCrowdedStrategyBuilder(String typeTag, String desc) {
-		super("most_crowded_lss", "mostCrowdedStrategy");
-		// TODO Auto-generated constructor stub
-	}
 
 	@Override
 	protected LightSwitchingStrategy create_instance(JSONObject data) {
