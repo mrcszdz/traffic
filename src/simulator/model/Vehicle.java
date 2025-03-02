@@ -98,20 +98,18 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 			int length = this._carretera.getLength();
 			int distAux;
 			int contAux;
-			this._dist = this._dist + this._vActual;
 			if(posAux >= length) {
 				distAux = length - this._pos;
-				this._pos = length;
+				this._pos =  length;
 				this._status = VehicleStatus.WAITING;
 				this._vActual = 0;
-				this._currentJunction++;
 				this._itinerary.get(this._currentJunction).enter(this);
 			}
 			else {
 				distAux = posAux - this._pos;
 				this._pos = posAux;
 			}
-			
+			this._dist = this._dist + distAux;
 			contAux = this._contClass * distAux;
 			this._contamAcum += contAux;
 			this._carretera.addContamination(contAux);
@@ -123,7 +121,10 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 			throw new IllegalArgumentException ("Estado del coche no correspondiente");
 		
 		else {
-			if(this._carretera != null) this._carretera.exit(this);
+			if(this._carretera != null) {
+				this._carretera.exit(this);
+				this._pos = 0;
+			}
 			if(this._currentJunction == this._itinerary.size() - 1) {
 				this._status = VehicleStatus.ARRIVED;
 				this._carretera = null;
@@ -154,7 +155,7 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 		jcar.put("co2", this._contamAcum);
 		jcar.put("class", this._contClass);
 		jcar.put("status", this._status.toString());
-		if(this._status != VehicleStatus.PENDING && this._status != VehicleStatus.WAITING && this._carretera != null) {
+		if(this._status != VehicleStatus.PENDING && this._carretera != null) {
 			jcar.put("road", this._carretera.getId());
 			jcar.put("location", this._pos);
 		}

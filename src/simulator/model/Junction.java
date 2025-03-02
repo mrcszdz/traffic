@@ -47,6 +47,7 @@ public class Junction extends SimulatedObject{
 		  _queueByRoad = new HashMap<Road, List<Vehicle>>();
 		  _inRoads = new ArrayList<Road>();
 		  _queues = new ArrayList<List<Vehicle>>();
+		  _lastSwitchingTime = 0;
 		  
 	}
 
@@ -139,10 +140,10 @@ public class Junction extends SimulatedObject{
 				}
 			}
 		}
-		int nextGreen = this._lss.chooseNextGreen(_inRoads, _queues, green, time, time);
+		int nextGreen = this._lss.chooseNextGreen(_inRoads, _queues, green, this._lastSwitchingTime, time);
 		if(green != nextGreen) {
 			this._greenLightIndex = nextGreen;
-			this._lastSwitchingTime = 0;
+			this._lastSwitchingTime = time;
 		}
 	}
 
@@ -158,7 +159,12 @@ public class Junction extends SimulatedObject{
 			JSONObject jqueue = new JSONObject();
 			Road road = itr.next();
 			jqueue.put("road", road.getId());
-			jqueue.put("vehicles", this._queueByRoad.get(road));
+			JSONArray ja1 = new JSONArray();
+			Iterator<Vehicle> itC = this._queueByRoad.get(road).iterator();
+			while(itC.hasNext()) {
+				ja1.put(itC.next().getId());
+			}
+			jqueue.put("vehicles", ja1);
 			ja.put(jqueue);
 		}
 		jjunction.put("queues", ja);

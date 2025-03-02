@@ -41,6 +41,7 @@ public class Controller {
     	}
 		jo.put("states", ja);
 		p.print(jo);
+		System.out.println(jo);
     }
     
     public void reset() {

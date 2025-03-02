@@ -32,7 +32,7 @@ public class InterCityRoad extends Road {
 
 	@Override
 	public void updateSpeedLimit() {
-		if(this._limCont <= this._contAcum) {
+		if(this._limCont < this._contAcum) {
 			this._limVel = this._maxVel/2;
 		}
 		else this._limVel = this._maxVel;

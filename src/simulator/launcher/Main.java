@@ -27,6 +27,8 @@ import simulator.factories.NewJunctionEventBuilder;
 import simulator.factories.NewCityRoadEventBuilder;
 import simulator.factories.NewInterCityRoadEventBuilder;
 import simulator.factories.NewVehicleEventBuilder;
+import simulator.factories.SetContClassEventBuilder;
+import simulator.factories.SetWeatherEventBuilder;
 import simulator.factories.Factory;
 import simulator.model.DequeuingStrategy;
 import simulator.model.Event;
@@ -126,8 +128,12 @@ public class Main {
 		ebs.add( new NewCityRoadEventBuilder() );
 		ebs.add( new NewInterCityRoadEventBuilder() );
 		ebs.add( new NewVehicleEventBuilder() );
+		ebs.add( new SetWeatherEventBuilder() );
+		ebs.add(new SetContClassEventBuilder() );
 		Factory<Event> eventsFactory = new BuilderBasedFactory<>(ebs);
 		_eventsFactory = eventsFactory;
+		
+		
 	}
 
 	private static void startBatchMode() throws IOException {
@@ -140,6 +146,7 @@ public class Main {
 		 controller.loadEvents(input);
 		 input.close();
 		 controller.run(_timeLimit, output);
+		 
 	}
 
 	private static void start(String[] args) throws IOException {
