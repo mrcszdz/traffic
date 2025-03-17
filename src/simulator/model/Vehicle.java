@@ -131,13 +131,10 @@ public class Vehicle extends SimulatedObject implements Comparable<Vehicle> {
 				this._vActual = 0;
 			}
 			else {
-				this._carretera = this._itinerary.get(this._currentJunction).get_outRoadByJunction().get(this._itinerary.get(this._currentJunction + 1));
-				try {
+				this._carretera = this._itinerary.get(this._currentJunction).roadTo(this._itinerary.get(this._currentJunction + 1));
+				
 					this._carretera.enter(this);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.getMessage();
-				}
+				
 				this._currentJunction++;
 				this._pos = 0;
 				this._vActual = 0;

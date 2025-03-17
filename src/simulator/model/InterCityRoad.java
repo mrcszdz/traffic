@@ -43,11 +43,8 @@ public class InterCityRoad extends Road {
 		int speed;
 		if(this._weatherReport == Weather.STORM) speed = (this._limVel*8)/10;
 		else speed = this._limVel;
-		try {
+		
 			v.setSpeed(speed);
-		} catch (Exception e) {
-			e.getMessage();
-		}
 		
 	}
 }

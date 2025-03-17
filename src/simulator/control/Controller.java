@@ -32,16 +32,19 @@ public class Controller {
     
     public void run(int n, OutputStream out) {
     	PrintStream p = new PrintStream(out);
-    	JSONObject jo = new JSONObject();
-    	JSONArray ja = new JSONArray();
     	
-    	for (int i = 0; i < n; i++) {
+    	p.println("{");
+    	p.println("states:[");
+    	
+    	for (int i = 0; i < n-1; i++) {
     	    _sim.advance();
-    	    ja.put(_sim.report());
+    	    p.println(_sim.report()+",");
     	}
-		jo.put("states", ja);
-		p.print(jo);
-		System.out.println(jo);
+        _sim.advance();
+	    p.println(_sim.report());
+    
+		p.print("]}");
+		//System.out.println(jo);
     }
     
     public void reset() {

@@ -28,26 +28,26 @@ public RoadMap() {
 }
 	
 	public void addJunction(Junction j) throws IllegalArgumentException{
-		if(this._junctionsMap.get(j.getId()) != null) throw new IllegalArgumentException();
+		if(this._junctionsMap.get(j.getId()) != null) throw new IllegalArgumentException("Invalid Junction");
 		this._junctions.add(j);
 		this._junctionsMap.put(j.getId(), j);
 	}
 	
 	public void addRoad(Road r) throws IllegalArgumentException{
-		if(this._roadsMap.get(r.getId()) != null) throw new IllegalArgumentException();
-		if(!this._junctions.contains(r.getDest()) || !this._junctions.contains(r.getSrc())) throw new IllegalArgumentException();
+		if(this._roadsMap.get(r.getId()) != null) throw new IllegalArgumentException("Invalid Road");
+		if(!this._junctions.contains(r.getDest()) || !this._junctions.contains(r.getSrc())) throw new IllegalArgumentException("Invalid Road");
 		this._roads.add(r);
 		this._roadsMap.put(r.getId(), r);		
 	}
 	
 	public void addVehicle(Vehicle v) {
-		if(this._vehiclesMap.get(v.getId()) != null) throw new IllegalArgumentException();
+		if(this._vehiclesMap.get(v.getId()) != null) throw new IllegalArgumentException("Invalid Vehicle");
 		Iterator<Junction> itj = v.getItinerary().iterator();
-		Junction J1 = itj.next();
+		Junction j1 = itj.next();
 		while(itj.hasNext()) {
-			Junction J2 = itj.next();
-			if(J1.get_outRoadByJunction().get(J2) == null) throw new IllegalArgumentException();
-			J1 = J2;
+			Junction j2 = itj.next();
+			if(j1.roadTo(j2) == null) throw new IllegalArgumentException();
+			j1 = j2;
 		}
 		this._vehicles.add(v);
 		this._vehiclesMap.put(v.getId(), v);
@@ -67,6 +67,8 @@ public RoadMap() {
 	public Junction getJunction(String id) {
 		if(this._junctionsMap.containsKey(id))return this._junctionsMap.get(id);
 		else return null;
+		
+		//)return this._junctionsMap.get(id);
 	}
 	
 	public List<Vehicle> getVehicles(){

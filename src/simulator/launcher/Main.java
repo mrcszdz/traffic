@@ -109,6 +109,7 @@ public class Main {
 	private static void parseTicksOption(CommandLine line) throws ParseException {
 		
 		_timeLimit = Integer.parseInt(line.getOptionValue("t", "10"));
+		
 	}
 
 	private static void initFactories() {

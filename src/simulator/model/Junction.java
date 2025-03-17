@@ -34,9 +34,9 @@ public class Junction extends SimulatedObject{
 	public Junction(String id, LightSwitchingStrategy lsStrategy, DequeuingStrategy dqStrategy, int xCoor, int yCoor) throws IllegalArgumentException{
 		  super(id);
 		  
-		  if(lsStrategy == null) throw new IllegalArgumentException();
-		  if(dqStrategy == null) throw new IllegalArgumentException();
-		  if(xCoor < 0 || yCoor < 0) throw new IllegalArgumentException();
+		  if(lsStrategy == null) throw new IllegalArgumentException("Invalid LightSwitching Strategy");
+		  if(dqStrategy == null) throw new IllegalArgumentException("Invalid Dequeing Strategy");
+		  if(xCoor < 0 || yCoor < 0) throw new IllegalArgumentException("Invalid Coords");
 				  
 		  _lss = lsStrategy;
 		  _dqs = dqStrategy;
@@ -52,7 +52,7 @@ public class Junction extends SimulatedObject{
 	}
 
 	public void addIncomingRoad(Road r) throws IllegalArgumentException{
-		if(r.getDest() != this) throw new IllegalArgumentException("Carretera mal");
+		if(r.getDest() != this) throw new IllegalArgumentException("Invalid Road");
 		else {
 			List<Vehicle> listaVehicle = new LinkedList<Vehicle>();
 			this._inRoads.add(r);
@@ -102,7 +102,7 @@ public class Junction extends SimulatedObject{
 	}
 	
 	public void addOutgoingRoad(Road r) throws IllegalArgumentException{
-		if(r.getSrc() != this) throw new IllegalArgumentException("Carretera mal");
+		if(r.getSrc() != this) throw new IllegalArgumentException("Invalid Road");
 		else {
 			this._outRoadByJunction.put(r._destiny, r);
 		}

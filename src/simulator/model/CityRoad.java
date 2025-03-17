@@ -25,10 +25,8 @@ public class CityRoad extends Road {
 	public void calculateVehicleSpeed(Vehicle v) {
 		int speed;
 		speed = ((11-v.getContClass())*this._limVel)/11;
-		try {
+
 			v.setSpeed(speed);
-		} catch (Exception e) {
-			e.getMessage();
-		}
+		
 	}
 }

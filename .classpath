@@ -8,7 +8,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="tests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="C:/Users/jaime/OneDrive/Documentos/GitHub/traffic/lib/commons-cli-1.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/jaime/OneDrive/Documentos/GitHub/traffic/lib/json.jar"/>
+	<classpathentry kind="lib" path="C:/Users/usuario_local/Documents/GitHub/traffic/lib/commons-cli-1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/usuario_local/Documents/GitHub/traffic/lib/json.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

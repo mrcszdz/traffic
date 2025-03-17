@@ -29,7 +29,7 @@ public class TrafficSimulator {
     }
     
     public void addEvent(Event e) throws IllegalArgumentException{ 
-    	if(e.getTime() <= this._time) throw new IllegalArgumentException();
+    	if(e.getTime() <= this._time) throw new IllegalArgumentException("Invalid Time");
     	this._events.add(e);
     }
     
@@ -38,7 +38,12 @@ public class TrafficSimulator {
     	Iterator<Event> it = this._events.iterator();
     	boolean tiempoMenor = true;
     	List<Event> listaRemove = new ArrayList<Event>();
-    	while(it.hasNext() && tiempoMenor){
+    	
+    	while(_events.size()>0 && _events.peek().getTime() == this._time) {
+    		_events.poll().execute(_roadMap);
+    	}
+    	
+    	/*while(it.hasNext() && tiempoMenor){
     		Event e = it.next();
     		if(e._time > this._time) tiempoMenor = false;
     		else if(e._time == this._time) {
@@ -47,6 +52,8 @@ public class TrafficSimulator {
     		}
     	}
     	this._events.removeAll(listaRemove);
+    	*/
+    	
     	advanceJunctions();
     	advanceRoads();
     }

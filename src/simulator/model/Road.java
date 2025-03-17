@@ -23,12 +23,10 @@ abstract public class Road extends SimulatedObject{
 	Road(String id, Junction srcJunc, Junction destJunc, int maxSpeed, int contLimit, int length, Weather weather)throws IllegalArgumentException {
 		  super(id);
 		  
-		  if(maxSpeed <= 0) throw new IllegalArgumentException();
-		  if(contLimit < 0) throw new IllegalArgumentException();
-		  if(length <= 0) throw new IllegalArgumentException();
-		  if(weather == null) throw new IllegalArgumentException();
-		  
-		  
+		  if(maxSpeed <= 0) throw new IllegalArgumentException("Velocidad Maxima invalida");
+		  if(contLimit < 0) throw new IllegalArgumentException("Contaminacion maxima invalida");
+		  if(length <= 0) throw new IllegalArgumentException("Tamaño invalido");
+		  if(weather == null) throw new IllegalArgumentException("Tiempo invalido");
 		  
 		  this._origin = srcJunc;
 		  this._destiny = destJunc;
@@ -40,13 +38,10 @@ abstract public class Road extends SimulatedObject{
 		  this._listaCoches = new ArrayList<Vehicle>();
 		  this._weatherReport = weather;
 		  
-		  try {
+		
 			  destJunc.addIncomingRoad(this);
 			  srcJunc.addOutgoingRoad(this);
-		  } catch (Exception e) {
-			  // TODO Auto-generated catch block
-			  e.getMessage();
-		  }
+		 
 		}
 
 	
