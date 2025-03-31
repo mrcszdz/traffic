@@ -9,7 +9,7 @@ import java.util.Queue;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class TrafficSimulator {
+public class TrafficSimulator implements Observable<TrafficSimulator>{
 
     RoadMap _roadMap;
     Queue<Event> _events;
@@ -86,4 +86,18 @@ public class TrafficSimulator {
 		return jreport;
 	}
     //...
+
+
+	@Override
+	public void addObserver(TrafficSimulator o) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void removeObserver(TrafficSimulator o) {
+		// TODO Auto-generated method stub
+		
+	}
 }

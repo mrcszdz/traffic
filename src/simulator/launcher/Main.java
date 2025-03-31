@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -34,6 +36,7 @@ import simulator.model.DequeuingStrategy;
 import simulator.model.Event;
 import simulator.model.LightSwitchingStrategy;
 import simulator.model.TrafficSimulator;
+import simulator.view.MainWindow;
 
 
 public class Main {
@@ -42,6 +45,7 @@ public class Main {
 	private static String _outFile = null;
 	private static Factory<Event> _eventsFactory = null;
 	private static int _timeLimit = 10;
+	private static String _mode = "gui";
 
 	private static void parseArgs(String[] args) {
 
@@ -54,6 +58,7 @@ public class Main {
 		CommandLineParser parser = new DefaultParser();
 		try {
 			CommandLine line = parser.parse(cmdLineOptions, args);
+			parseModeOption(line);
 			parseHelpOption(line, cmdLineOptions);
 			parseInFileOption(line);
 			parseOutFileOption(line);
@@ -83,9 +88,10 @@ public class Main {
 		cmdLineOptions.addOption(Option.builder("o").longOpt("output").hasArg().desc("Output file, where reports are written.").build());
 		cmdLineOptions.addOption(Option.builder("h").longOpt("help").desc("Print this message").build());
 		cmdLineOptions.addOption(Option.builder("t").longOpt("ticks").hasArg().desc(" Ticks to the simulator's main loop (default value is 10).").build());
-
+		cmdLineOptions.addOption(Option.builder("m").longOpt("mode").hasArg().desc("Execute mode").build());
 		return cmdLineOptions;
 	}
+
 
 	private static void parseHelpOption(CommandLine line, Options cmdLineOptions) {
 		if (line.hasOption("h")) {
@@ -96,10 +102,17 @@ public class Main {
 	}
 
 	private static void parseInFileOption(CommandLine line) throws ParseException {
-		_inFile = line.getOptionValue("i");
-		if (_inFile == null) {
-			throw new ParseException("An events file is missing");
+		if(_mode == "gui") {
+			if(line.hasOption("i")) {
+				_inFile = line.getOptionValue("i");
+			}
+		}else {
+			_inFile = line.getOptionValue("i");
+			if (_inFile == null) {
+				throw new ParseException("An events file is missing");
+			}
 		}
+		
 	}
 
 	private static void parseOutFileOption(CommandLine line) throws ParseException {
@@ -112,6 +125,10 @@ public class Main {
 		
 	}
 
+	private static void parseModeOption(CommandLine line) throws ParseException{
+		_mode = line.getOptionValue("m");
+	}
+	
 	private static void initFactories() {
 		List<Builder<LightSwitchingStrategy>> lsbs = new ArrayList<>();
 		lsbs.add( new RoundRobinStrategyBuilder() );
@@ -150,10 +167,32 @@ public class Main {
 		 
 	}
 
+	private static void startGUIMode() throws IOException{
+		
+		 TrafficSimulator sim = new TrafficSimulator();
+		 Controller controller = new Controller(sim, _eventsFactory);
+		 
+		 if(_inFile != null) {
+			 InputStream input = new FileInputStream(_inFile);
+			 controller.loadEvents(input);
+			 input.close();
+		 }
+		 SwingUtilities.invokeLater(new Runnable() {	
+				@Override
+				public void run() {
+					new MainWindow(controller);
+				}
+			});
+	}
+
+	
 	private static void start(String[] args) throws IOException {
 		initFactories();
 		parseArgs(args);
-		startBatchMode();
+		if(_mode == "gui") {
+			startGUIMode();
+		}
+		else startBatchMode();
 	}
 
 	// example command lines:
