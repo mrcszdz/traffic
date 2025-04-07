@@ -9,7 +9,7 @@ import java.util.Queue;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class TrafficSimulator implements Observable<TrafficSimulator>{
+public class TrafficSimulator implements Observable<TrafficSimObserver>{
 
     RoadMap _roadMap;
     Queue<Event> _events;
@@ -42,18 +42,6 @@ public class TrafficSimulator implements Observable<TrafficSimulator>{
     	while(_events.size()>0 && _events.peek().getTime() == this._time) {
     		_events.poll().execute(_roadMap);
     	}
-    	
-    	/*while(it.hasNext() && tiempoMenor){
-    		Event e = it.next();
-    		if(e._time > this._time) tiempoMenor = false;
-    		else if(e._time == this._time) {
-    			e.execute(_roadMap);
-    			listaRemove.add(e);
-    		}
-    	}
-    	this._events.removeAll(listaRemove);
-    	*/
-    	
     	advanceJunctions();
     	advanceRoads();
     }
@@ -87,16 +75,15 @@ public class TrafficSimulator implements Observable<TrafficSimulator>{
 	}
     //...
 
-
 	@Override
-	public void addObserver(TrafficSimulator o) {
-		// TODO Auto-generated method stub
+	public void addObserver(TrafficSimObserver o) {
+		
 		
 	}
 
 
 	@Override
-	public void removeObserver(TrafficSimulator o) {
+	public void removeObserver(TrafficSimObserver o) {
 		// TODO Auto-generated method stub
 		
 	}

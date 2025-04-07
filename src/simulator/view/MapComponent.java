@@ -77,15 +77,15 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 		for (Road r : _map.getRoads()) {
 
 			// the road goes from (x1,y1) to (x2,y2)
-			int x1 = r.getSrc().getX();
-			int y1 = r.getSrc().getY();
-			int x2 = r.getDest().getX();
-			int y2 = r.getDest().getY();
+			int x1 = r.getSrc().get_x();
+			int y1 = r.getSrc().get_y();
+			int x2 = r.getDest().get_x();
+			int y2 = r.getDest().get_y();
 
 			// choose a color for the arrow depending on the traffic light of the road
 			Color arrowColor = _RED_LIGHT_COLOR;
-			int idx = r.getDest().getGreenLightIndex();
-			if (idx != -1 && r.equals(r.getDest().getInRoads().get(idx))) {
+			int idx = r.getDest().get_greenLightIndex();
+			if (idx != -1 && r.equals(r.getDest().get_inRoads().get(idx))) {
 				arrowColor = _GREEN_LIGHT_COLOR;
 			}
 
@@ -112,10 +112,10 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 				// The calculation below compute the coordinate (vX,vY) of the vehicle on the
 				// corresponding road. It is calculated relatively to the length of the road, and
 				// the location on the vehicle.
-				int x1 = r.getSrc().getX();
-				int y1 = r.getSrc().getY();
-				int x2 = r.getDest().getX();
-				int y2 = r.getDest().getY();
+				int x1 = r.getSrc().get_x();
+				int y1 = r.getSrc().get_y();
+				int x2 = r.getDest().get_x();
+				int y2 = r.getDest().get_y();
 
 				double f = ((float)v.getLocation()) / r.getLength();
 				int vX = (int)(x1 + (x2-x1)*f); 
@@ -138,8 +138,8 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 		for (Junction j : _map.getJunctions()) {
 
 			// (x,y) are the coordinates of the junction
-			int x = j.getX();
-			int y = j.getY();
+			int x = j.get_x();
+			int y = j.get_y();
 
 			// draw a circle with center at (x,y) with radius _JRADIUS
 			g.setColor(_JUNCTION_COLOR);
@@ -157,8 +157,8 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 		int maxW = 200;
 		int maxH = 200;
 		for (Junction j : _map.getJunctions()) {
-			maxW = Math.max(maxW, j.getX());
-			maxH = Math.max(maxH, j.getY());
+			maxW = Math.max(maxW, j.get_x());
+			maxH = Math.max(maxH, j.get_y());
 		}
 		maxW += 20;
 		maxH += 20;
@@ -217,22 +217,22 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 		});
 	}
 
-	@Override
+	
 	public void onAdvance(RoadMap map, Collection<Event> events, int time) {
 		update(map);
 	}
 
-	@Override
+	
 	public void onEventAdded(RoadMap map, Collection<Event> events, Event e, int time) {
 		update(map);
 	}
 
-	@Override
+	
 	public void onReset(RoadMap map, Collection<Event> events, int time) {
 		update(map);
 	}
 
-	@Override
+	
 	public void onRegister(RoadMap map, Collection<Event> events, int time) {
 		update(map);
 	}
