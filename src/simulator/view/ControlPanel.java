@@ -1,5 +1,6 @@
 package simulator.view;
 
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,7 +24,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	}
 
 	private void initGUI() {
-		JPanel layout = new JPanel();
+		JPanel layout = new JPanel(new FlowLayout());
 		layout.setOpaque(true);
 
 		
@@ -36,7 +37,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 				//lo que tiene q hacer cuando pulsas open
 			}
 			});
-		layout.add(open); 
+		layout.add(open, FlowLayout.LEFT); 
 		
 		
 		JButton co2 = new JButton();
@@ -48,7 +49,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 				//lo que tiene q hacer cuando pulsas open
 			}
 			});
-		layout.add(co2); 
+		layout.add(co2, FlowLayout.LEFT); 
 		
 		
 		JButton weather = new JButton();
@@ -60,7 +61,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 				//lo que tiene q hacer cuando pulsas open
 			}
 			});
-		layout.add(weather); 
+		layout.add(weather, FlowLayout.LEFT);  
 		
 		
 		JButton play= new JButton();
@@ -72,7 +73,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 				//lo que tiene q hacer cuando pulsas open
 			}
 			});
-		layout.add(play); 
+		layout.add(play, FlowLayout.LEFT); 
 		
 		JButton stop= new JButton();
 		stop.setBounds(820,820,150,100); //lo mismo
@@ -83,20 +84,20 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 				//lo que tiene q hacer cuando pulsas open
 			}
 			});
-		layout.add(stop);
+		layout.add(stop, FlowLayout.LEFT); 
 		
 		
 		JLabel ticks = new JLabel("Ticks"); //ESTO HAY Q REVISAR XQ ESTA EN UNA CAJA BLANCA
 		ticks.setLocation(1000, 1000);
 		ticks.setSize (50, 40);
 		ticks.setHorizontalAlignment (JLabel.CENTER);
-		layout.add(ticks);
+		layout.add(ticks, FlowLayout.LEFT); 
 		
 		JLabel ticksNum = new JLabel( Integer.toString(this._ticks));
 		ticksNum.setLocation(1100, 1100);
 		ticksNum.setSize (50, 40);
 		ticksNum.setHorizontalAlignment (JLabel.CENTER);
-		layout.add(ticksNum);
+		layout.add(ticksNum, FlowLayout.LEFT); 
 
 		
 		//LUEGO VA EL BOTON ESE Q NO SE COMO SE HACE
@@ -110,7 +111,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 				//lo que tiene q hacer cuando pulsas open
 			}
 			});
-		layout.add(exit);
+		layout.add(exit, FlowLayout.RIGHT); 
 		
 	}
 

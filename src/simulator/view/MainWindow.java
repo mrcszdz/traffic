@@ -27,7 +27,7 @@ public class MainWindow extends JFrame {
 		this.setContentPane(mainPanel);
 
 		mainPanel.add(new ControlPanel(_ctrl), BorderLayout.PAGE_START);
-		mainPanel.add(new StatusBar(_ctrl),BorderLayout.PAGE_END);
+	//	mainPanel.add(new StatusBar(_ctrl),BorderLayout.PAGE_END);
 		
 		JPanel viewsPanel = new JPanel(new GridLayout(1, 2));
 		mainPanel.add(viewsPanel, BorderLayout.CENTER);
