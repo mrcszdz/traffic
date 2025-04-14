@@ -45,7 +45,7 @@ public class Main {
 	private static String _outFile = null;
 	private static Factory<Event> _eventsFactory = null;
 	private static int _timeLimit = 10;
-	private static String _mode = "gui";
+	private static Boolean _mode = true;
 
 	private static void parseArgs(String[] args) {
 
@@ -102,7 +102,7 @@ public class Main {
 	}
 
 	private static void parseInFileOption(CommandLine line) throws ParseException {
-		if(_mode == "gui") {
+		if(_mode == true) {
 			if(line.hasOption("i")) {
 				_inFile = line.getOptionValue("i");
 			}
@@ -126,7 +126,7 @@ public class Main {
 	}
 
 	private static void parseModeOption(CommandLine line) throws ParseException{
-		_mode = line.getOptionValue("m");
+		//_mode = line.getOptionValue("m") == "gui";
 	}
 	
 	private static void initFactories() {
@@ -189,7 +189,7 @@ public class Main {
 	private static void start(String[] args) throws IOException {
 		initFactories();
 		parseArgs(args);
-		if(_mode == "gui") {
+		if(_mode) {
 			startGUIMode();
 		}
 		else startBatchMode();

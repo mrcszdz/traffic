@@ -87,4 +87,9 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 		// TODO Auto-generated method stub
 		
 	}
+
+
+	public int get_time() {
+		return _time;
+	}
 }

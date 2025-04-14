@@ -60,5 +60,9 @@ public class Controller {
 	public void removeObserver(TrafficSimObserver o) {
 		this._sim.removeObserver(o);
 	}
+
+	public TrafficSimulator get_sim() {
+		return _sim;
+	}
     
 }

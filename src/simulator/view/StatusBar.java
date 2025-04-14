@@ -17,8 +17,10 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 		initGUI();
 	}
 	private void initGUI() {
-		JPanel statusBar = new JPanel(new FlowLayout());
+		setLayout(new FlowLayout(FlowLayout.LEFT));
+		JPanel statusBar = new JPanel();
 		
-		statusBar.add(new JLabel("Time:" + ));
+		statusBar.add(new JLabel("Time:  " + _ctrl.get_sim().get_time()));
+		this.add(statusBar);
 	}
 }
