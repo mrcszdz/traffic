@@ -49,6 +49,12 @@ public class Controller {
 		//System.out.println(jo);
     }
     
+    public void run(int n) {
+    	for (int i = 0; i < n; i++) {
+    	    _sim.advance();
+    	}
+    }
+    
     public void reset() {
     	this._sim.reset();
     }

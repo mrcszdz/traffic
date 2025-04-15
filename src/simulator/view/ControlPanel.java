@@ -1,6 +1,8 @@
 package simulator.view;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +21,9 @@ public class ControlPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1206312102543205364L;
     private Controller _ctrl;
-	
+    private boolean _stopped;
+    private JToolBar toolBar;
+    private ChangeCO2ClassDialog co2Dialog;
 
 	ControlPanel(Controller ctrl) {
 		_ctrl = ctrl;
@@ -27,8 +31,9 @@ public class ControlPanel extends JPanel {
 	}
 
 	private void initGUI() {
+		co2Dialog = new ChangeCO2ClassDialog(_ctrl, (Frame) SwingUtilities.getWindowAncestor(this));
 		setLayout(new BorderLayout());
-		JToolBar toolBar = new JToolBar();
+		this.toolBar = new JToolBar();
 
 		JButton load = new JButton();
 		load.setActionCommand("load");
@@ -62,7 +67,7 @@ public class ControlPanel extends JPanel {
 		co2.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		       
+		       co2Dialog.open();
 		    }
 		});
 		co2.setIcon(loadImage("resources/icons/co2class.png"));
@@ -80,7 +85,18 @@ public class ControlPanel extends JPanel {
 		toolBar.add(weather);
 		
 		
+		JSpinner ticks = new JSpinner(new SpinnerNumberModel(10, 1, 10000, 1));
 		
+		ticks.setToolTipText("Simulation steps to run: 1-10000");
+		ticks.setMaximumSize(new Dimension(80, 40));
+		ticks.setMinimumSize(new Dimension(80, 40));
+		
+		//toolBar.addSeparator();
+		
+//		JSeparator Gris = new JSeparator(SwingConstants.VERTICAL);
+//		Gris.setBackground(Color.GRAY);
+//		toolBar.add(Gris);
+        
 		toolBar.addSeparator();
 		
 		JButton run = new JButton();
@@ -88,7 +104,7 @@ public class ControlPanel extends JPanel {
 		run.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		       
+		    	run_sim((Integer)ticks.getValue());
 		    }
 		});
 		run.setIcon(loadImage("resources/icons/run.png"));
@@ -115,12 +131,6 @@ public class ControlPanel extends JPanel {
 		// final range value   = 10000   (third parameter)
 		// increment = 100				 (fourth parameter)
 		
-		JSpinner ticks = new JSpinner(new SpinnerNumberModel(10, 1, 10000, 1));
-
-		ticks.setToolTipText("Simulation steps to run: 1-10000");
-		ticks.setMaximumSize(new Dimension(80, 40));
-		ticks.setMinimumSize(new Dimension(80, 40));
-		ticks.setPreferredSize(new Dimension(80, 40));
 		toolBar.add(ticks);
 
 		
@@ -142,7 +152,7 @@ public class ControlPanel extends JPanel {
 
 	}
 	
-		protected ImageIcon loadImage(String path) {
+	protected ImageIcon loadImage(String path) {
 		return new ImageIcon(Toolkit.getDefaultToolkit().createImage(path));
 	}
 	
@@ -152,6 +162,22 @@ public class ControlPanel extends JPanel {
 
 		if (n == 0) {
 			System.exit(0);
+		}
+	}
+	
+	protected void run_sim(int n) {
+		if (n > 0 && !_stopped) {
+			try {
+				_ctrl.run(1);
+	         		SwingUtilities.invokeLater(() -> run_sim(n - 1));
+			} catch (Exception e) {
+				// TODO show error message
+				_stopped = true;
+				// TODO enable the toolbar
+			}
+		} else {
+			_stopped = true;
+	                // TODO enable the toolbar
 		}
 	}
 
