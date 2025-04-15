@@ -92,4 +92,9 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	public int get_time() {
 		return _time;
 	}
+
+
+	public RoadMap get_roadMap() {
+		return _roadMap;
+	}
 }

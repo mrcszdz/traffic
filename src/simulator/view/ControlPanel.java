@@ -4,11 +4,14 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import javax.swing.*;
 
 import simulator.control.Controller;
-
+import java.io.InputStream;
 
 public class ControlPanel extends JPanel {
 	/**
@@ -31,8 +34,22 @@ public class ControlPanel extends JPanel {
 		load.setActionCommand("load");
 		load.addActionListener(new ActionListener() {
 		    @Override
-		    public void actionPerformed(ActionEvent e) {
-		       
+		public void actionPerformed(ActionEvent e) {
+	    	JFileChooser fileChooser = new JFileChooser();
+	    	int v = fileChooser.showOpenDialog(null);
+    		if (v == JFileChooser.APPROVE_OPTION){
+    		   InputStream file;
+				try {
+					file = new FileInputStream(fileChooser.getSelectedFile());
+					System.out.println ("loading selected file");
+		    		   _ctrl.reset();
+		    		   _ctrl.loadEvents(file);
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(fileChooser,"No se ha encontrado el archivo","Error",JOptionPane.WARNING_MESSAGE);
+				}
+	    	}
+	    	   else System.out.println ("load cancelled by user");
 		    }
 		});
 		load.setIcon (loadImage("resources/icons/open.png"));
