@@ -12,4 +12,9 @@ public class NewCityRoadEvent extends NewRoadEvent{
 		CityRoad road = new CityRoad(_id, map.getJunction(this._srcJunction), map.getJunction(this._destJunction), this._maxSpeed, this._contLimit, this._length, this._weather);
 		map.addRoad(road);
 	}
+	
+	public String toString() {
+		return super.toString();
+	}
+	
 }

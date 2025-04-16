@@ -13,9 +13,19 @@ import java.io.FileNotFoundException;
 import javax.swing.*;
 
 import simulator.control.Controller;
-import java.io.InputStream;
+import simulator.model.Event;
+import simulator.model.Road;
+import simulator.model.RoadMap;
+import simulator.model.SetContClassEvent;
+import simulator.model.TrafficSimObserver;
+import simulator.model.Vehicle;
 
-public class ControlPanel extends JPanel {
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+public class ControlPanel extends JPanel implements TrafficSimObserver{
 	/**
 	 * 
 	 */
@@ -24,14 +34,18 @@ public class ControlPanel extends JPanel {
     private boolean _stopped;
     private JToolBar toolBar;
     private ChangeCO2ClassDialog co2Dialog;
+    private List<Vehicle> listaVehicle;
+    private List<Road> listaRoad;
 
 	ControlPanel(Controller ctrl) {
 		_ctrl = ctrl;
-		 initGUI();
+		listaVehicle = new ArrayList<Vehicle>();
+		listaRoad = new ArrayList<Road>();
+		initGUI();
 	}
 
 	private void initGUI() {
-		co2Dialog = new ChangeCO2ClassDialog(_ctrl, (Frame) SwingUtilities.getWindowAncestor(this));
+		co2Dialog = new ChangeCO2ClassDialog(_ctrl, listaVehicle, (Frame) SwingUtilities.getWindowAncestor(this));
 		setLayout(new BorderLayout());
 		this.toolBar = new JToolBar();
 
@@ -149,6 +163,7 @@ public class ControlPanel extends JPanel {
 		});
 		toolBar.add(quitButton);
 		this.add(toolBar);
+		_ctrl.addObserver(this);
 
 	}
 	
@@ -168,7 +183,7 @@ public class ControlPanel extends JPanel {
 	protected void run_sim(int n) {
 		if (n > 0 && !_stopped) {
 			try {
-				_ctrl.run(1);
+				_ctrl.run(n);
 	         		SwingUtilities.invokeLater(() -> run_sim(n - 1));
 			} catch (Exception e) {
 				// TODO show error message
@@ -179,6 +194,35 @@ public class ControlPanel extends JPanel {
 			_stopped = true;
 	                // TODO enable the toolbar
 		}
+	}
+
+	@Override
+	public void onAdvance(RoadMap map, Collection<Event> events, int time) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEventAdded(RoadMap map, Collection<Event> events, Event e, int time) {
+		for	(int i = 0; i < map.getVehicles().size(); i++) {
+			listaVehicle.add(map.getVehicles().get(i));
+		}
+		for	(int i = 0; i < map.getRoads().size(); i++) {
+			listaRoad.add(map.getRoads().get(i));
+		}
+	}
+
+	@Override
+	public void onReset(RoadMap map, Collection<Event> events, int time) {
+		listaVehicle.clear();
+		listaRoad.clear();
+		
+	}
+
+	@Override
+	public void onRegister(RoadMap map, Collection<Event> events, int time) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

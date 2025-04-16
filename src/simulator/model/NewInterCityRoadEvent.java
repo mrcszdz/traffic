@@ -13,4 +13,10 @@ public class NewInterCityRoadEvent extends NewRoadEvent {
 		InterCityRoad road = new InterCityRoad(this._id, map.getJunction(this._srcJunction), map.getJunction(this._destJunction), this._maxSpeed, this._contLimit, this._length, this._weather);
 		map.addRoad(road);
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+	
 }

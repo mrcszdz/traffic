@@ -11,11 +11,13 @@ import org.json.JSONObject;
 
 public class TrafficSimulator implements Observable<TrafficSimObserver>{
 
+	List<TrafficSimObserver> _observers;
     RoadMap _roadMap;
     Queue<Event> _events;
     int _time;
 
     public TrafficSimulator() {
+    	_observers = new ArrayList<TrafficSimObserver>();
         _roadMap = new RoadMap();
         _events = new PriorityQueue<>();
         _time = 0;
@@ -31,6 +33,9 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
     public void addEvent(Event e) throws IllegalArgumentException{ 
     	if(e.getTime() <= this._time) throw new IllegalArgumentException("Invalid Time");
     	this._events.add(e);
+    	for (TrafficSimObserver o :_observers) {
+    		o.onEventAdded(_roadMap, _events, e, _time);
+    	}
     }
     
     public void advance() {
@@ -44,6 +49,9 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
     	}
     	advanceJunctions();
     	advanceRoads();
+    	for (TrafficSimObserver o :_observers) {
+    		o.onAdvance(_roadMap, _events, _time);
+    	}
     }
 
 
@@ -77,15 +85,14 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 
 	@Override
 	public void addObserver(TrafficSimObserver o) {
-		
-		
+		_observers.add(o);
 	}
 
 
 	@Override
 	public void removeObserver(TrafficSimObserver o) {
 		// TODO Auto-generated method stub
-		
+		_observers.remove(o);
 	}
 
 

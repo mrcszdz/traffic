@@ -28,7 +28,7 @@ public class Controller {
     	JSONObject jo = new JSONObject(new JSONTokener(in));
     	JSONArray ja = jo.getJSONArray("events");
     	for(int i = 0; i < ja.length(); i++) {
-    		this._sim.addEvent(this._eventsFactory.create_instance(ja.getJSONObject(i)));
+    		this.addEvent(this._eventsFactory.create_instance(ja.getJSONObject(i)));
     	}
     }
     
@@ -55,6 +55,10 @@ public class Controller {
     	}
     }
     
+    public void addEvent(Event e) {
+    	this._sim.addEvent(e);
+    }
+    
     public void reset() {
     	this._sim.reset();
     }
@@ -69,6 +73,10 @@ public class Controller {
 
 	public TrafficSimulator get_sim() {
 		return _sim;
+	}
+
+	public Factory<Event> get_eventsFactory() {
+		return _eventsFactory;
 	}
     
 }

@@ -5,10 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.*;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
-import extra.jtable.EventsTableModel;
+import simulator.view.EventsTableModel;
 import simulator.control.Controller;
 
 
@@ -42,11 +40,25 @@ public class MainWindow extends JFrame {
 
 		// tables
 		JPanel eventsView = createViewPanel(new JTable(new EventsTableModel(_ctrl)), "Events");
+		new JScrollPane(eventsView);
 		eventsView.setPreferredSize(new Dimension(500, 200));
 		tablesPanel.add(eventsView);
 		// TODO add other tables
+		JPanel vehiclesView = createViewPanel(new JTable(new VehiclesTableModel(_ctrl)), "Vehicles");
+		new JScrollPane(vehiclesView);
+		vehiclesView.setPreferredSize(new Dimension(500, 200));
+		tablesPanel.add(vehiclesView);
 		// ...
-
+		JPanel roadsView = createViewPanel(new JTable(new RoadsTableModel(_ctrl)), "Roads");
+		new JScrollPane(roadsView);
+		roadsView.setPreferredSize(new Dimension(500, 200));
+		tablesPanel.add(roadsView);
+		
+		JPanel junctionView = createViewPanel(new JTable(new JunctionsTableModel(_ctrl)), "Junctions");
+		new JScrollPane(junctionView);
+		junctionView.setPreferredSize(new Dimension(500, 200));
+		tablesPanel.add(junctionView);
+		
 		// maps
 		JPanel mapView = createViewPanel(new MapComponent(_ctrl), "Map");
 		mapView.setPreferredSize(new Dimension(500, 400));

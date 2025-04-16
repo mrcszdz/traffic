@@ -22,4 +22,10 @@ public class NewJunctionEvent extends Event{
 		Junction junct = new Junction(_id, _lsStrat, _dqStrat, _xCoor, _xCoor);
 		map.addJunction(junct);
 	}
+	
+	@Override
+	public String toString() {
+		return "New Junction '"+_id+"'";
+	}
+	
 }
