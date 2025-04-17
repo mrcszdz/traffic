@@ -19,7 +19,7 @@ public class NewJunctionEvent extends Event{
 
 	@Override
 	void execute(RoadMap map) {
-		Junction junct = new Junction(_id, _lsStrat, _dqStrat, _xCoor, _xCoor);
+		Junction junct = new Junction(_id, _lsStrat, _dqStrat, _xCoor, _yCoor);
 		map.addJunction(junct);
 	}
 	
