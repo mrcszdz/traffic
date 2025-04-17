@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import simulator.control.Controller;
 import simulator.model.Event;
@@ -13,22 +14,25 @@ import simulator.model.TrafficSimObserver;
 
 public class StatusBar extends JPanel implements TrafficSimObserver{
 	
-	private Controller _ctrl;
+	private JTextField _time;
 	
 	public StatusBar(Controller controller){
-		_ctrl = controller;
-		initGUI();
+		
+		initGUI(controller);
+		controller.addObserver(this);
 	}
-	private void initGUI() {
+	private void initGUI(Controller ctrl) {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		JPanel statusBar = new JPanel();
-		
-		statusBar.add(new JLabel("Time:  " + _ctrl.get_sim().get_time()));
+		_time = new JTextField("Time: " + ctrl.get_sim().get_time());
+		statusBar.add(_time);
+		_time.setOpaque(false);
+		_time.setBorder(null);
 		this.add(statusBar);
 	}
 	@Override
 	public void onAdvance(RoadMap map, Collection<Event> events, int time) {
-		// TODO Auto-generated method stub
+		_time.setText("Time: " + time);
 		
 	}
 	@Override
@@ -38,7 +42,7 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 	}
 	@Override
 	public void onReset(RoadMap map, Collection<Event> events, int time) {
-		// TODO Auto-generated method stub
+		_time.setText("Time: " + time);
 		
 	}
 	@Override

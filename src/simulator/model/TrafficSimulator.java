@@ -27,7 +27,10 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
     public void reset() {
     	this._roadMap.clear();
     	this._events.clear();
-    	this._time = 0;    	
+    	this._time = 0; 
+    	for (TrafficSimObserver o :_observers) {
+    		o.onReset(_roadMap, _events, _time);
+    	}  	
     }
     
     public void addEvent(Event e) throws IllegalArgumentException{ 

@@ -30,25 +30,27 @@ import simulator.misc.Pair;
 
 import simulator.control.Controller;
 import simulator.model.Event;
+import simulator.model.Road;
 import simulator.model.SetContClassEvent;
-import simulator.model.Vehicle;
+import simulator.model.SetWeatherEvent;
+import simulator.model.Weather;
 
-public class ChangeCO2ClassDialog extends JDialog{
+public class ChangeWeatherDialog extends JDialog{
 	
 	private boolean _estado;
-	public ChangeCO2ClassDialog(Controller ctrl, List<Vehicle> listaVehicle, Frame f){
+	public ChangeWeatherDialog(Controller ctrl, List<Road> listaRoad, Frame f){
 		super(f, true);
         //this.dialogInit();
 		this.setTitle("Change CO2 class");
-		this.initGUI(ctrl, listaVehicle);
+		this.initGUI(ctrl, listaRoad);
 	}
 	
-	private void initGUI(Controller ctrl, List<Vehicle> lv) {
+	private void initGUI(Controller ctrl, List<Road> lr) {
 	     JPanel mainPanel = new JPanel();
 	     mainPanel.setLayout(new BoxLayout(mainPanel , BoxLayout.Y_AXIS));
 	     
 	     JTextArea descr = new JTextArea();
-	     descr.setText("Schedule an event to change the CO2 class of a vehicle after a given number of simulation ticks from now");
+	     descr.setText("Schedule an event to change the weather of a road after a given number of simulation ticks from now");
 	     descr.setLineWrap(true);
 	     descr.setWrapStyleWord(true);
 	     descr.setEditable(false);
@@ -58,22 +60,24 @@ public class ChangeCO2ClassDialog extends JDialog{
 	     //mainPanel.add(topPanel, );
 	    
 	     JPanel centerPanel = new JPanel(new FlowLayout());
-	     centerPanel.add( new JLabel("Vehicle:"));
+	     centerPanel.add( new JLabel("Road:"));
 	     
-	     JComboBox<String> botonVehiculo = new JComboBox<String>();
-	     for(int i = 0; i< lv.size(); i++) {
-	    	 botonVehiculo.addItem(lv.get(i).getId());
+	     JComboBox<String> botonRoad = new JComboBox<String>();
+	     for(int i = 0; i< lr.size(); i++) {
+	    	 botonRoad.addItem(lr.get(i).getId());
 	     }
-	     botonVehiculo.setPreferredSize(new Dimension(80, 25));
-	     centerPanel.add(botonVehiculo);
-	     centerPanel.add(new JLabel("   CO2 Class:"));
+	     botonRoad.setPreferredSize(new Dimension(80, 25));
+	     centerPanel.add(botonRoad);
+	     centerPanel.add(new JLabel("   Weather:"));
 	     
-	     JSpinner CO2Class = new JSpinner(new SpinnerNumberModel(0, 0, 10, 1));
-
-	     CO2Class.setMaximumSize(new Dimension(50, 25));
-	     CO2Class.setMinimumSize(new Dimension(50, 25));
-	     CO2Class.setPreferredSize(new Dimension(80, 25));
-	     centerPanel.add(CO2Class);
+	     JComboBox<String> botonWeather = new JComboBox<String>();
+	    	 botonWeather.addItem(Weather.CLOUDY.toString());
+	    	 botonWeather.addItem(Weather.WINDY.toString());
+	    	 botonWeather.addItem(Weather.RAINY.toString());
+	    	 botonWeather.addItem(Weather.STORM.toString());
+	    	 botonWeather.addItem(Weather.SUNNY.toString());
+	     botonWeather.setPreferredSize(new Dimension(80, 25));
+	     centerPanel.add(botonWeather);
 	     
 	     centerPanel.add(new JLabel("   Ticks:"));
 	     
@@ -96,7 +100,7 @@ public class ChangeCO2ClassDialog extends JDialog{
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                    _estado = false;
-                   ChangeCO2ClassDialog.this.setVisible(false); 
+                   ChangeWeatherDialog.this.setVisible(false); 
                 }
               });
          botPanel.add(cancel);
@@ -105,14 +109,14 @@ public class ChangeCO2ClassDialog extends JDialog{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-	            if (botonVehiculo.getSelectedItem() != null) {
-	            	List<Pair<String, Integer>> vehiculo = new ArrayList<Pair<String, Integer>>();
-	            	vehiculo.add(new Pair <String, Integer>(botonVehiculo.getSelectedItem().toString(), Integer.parseInt(CO2Class.getValue().toString())));
-	            	SetContClassEvent evento = new SetContClassEvent(ctrl.get_sim().get_time() + Integer.parseInt(ticks.getValue().toString()), vehiculo);
+	            if (botonRoad.getSelectedItem() != null) {
+	            	List<Pair<String, Weather>> weather = new ArrayList<Pair<String, Weather>>();
+	            	weather.add(new Pair <String, Weather>(botonRoad.getSelectedItem().toString(), Weather.valueOf(botonWeather.getSelectedItem().toString())));
+	            	SetWeatherEvent evento = new SetWeatherEvent(ctrl.get_sim().get_time() + Integer.parseInt(ticks.getValue().toString()), weather);
 	            	ctrl.addEvent(evento);
 	            }
 	            else _estado = false;
-	            ChangeCO2ClassDialog.this.setVisible(false);
+	            ChangeWeatherDialog.this.setVisible(false);
             }
           });
          botPanel.add(ok);
