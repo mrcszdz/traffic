@@ -112,6 +112,8 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 				int vY = y1;				
 
 				g.drawImage(_car, vX, vY - 6, 16, 16, this);
+				int vLabelColor = (int) (25.0 * (10.0 - (double) v.getContClass()));
+				g.setColor(new Color(0, vLabelColor, 0));
 				g.drawString(v.getId(), vX, vY - 8);
 				//TODO poner el identificador del vehículo encima de la imagen.
 			}
@@ -131,6 +133,7 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 				g.setColor(_GREEN_LIGHT_COLOR);
 			}
 			g.fillOval(getWidth()-100, (i+1)*50, _JRADIUS, _JRADIUS);
+			g.setColor(new Color(200, 100, 0));
 			g.drawString(r.getDest().getId(), getWidth()-100, ((i+1)*50) - 8);
 			i++;
 		}
