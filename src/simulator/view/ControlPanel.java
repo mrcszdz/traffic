@@ -32,25 +32,32 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	private static final long serialVersionUID = 1206312102543205364L;
     private Controller _ctrl;
     private boolean _stopped;
-    private JToolBar toolBar;
-    private List<Vehicle> listaVehicle;
-    private List<Road> listaRoad;
+    private JToolBar _toolBar;
+    private List<Vehicle> _listaVehicle;
+    private List<Road> _listaRoad;
+    private JButton _load;
+    private JButton _co2;
+    private JButton _weather;
+    private JSpinner _ticks;
+    private JButton _run;
+    private JButton _stop;
+    private JButton _quit;
 
 	ControlPanel(Controller ctrl) {
 		_ctrl = ctrl;
-		listaVehicle = new ArrayList<Vehicle>();
-		listaRoad = new ArrayList<Road>();
+		_listaVehicle = new ArrayList<Vehicle>();
+		_listaRoad = new ArrayList<Road>();
 		initGUI();
 	}
 
 	private void initGUI() {
 		
 		setLayout(new BorderLayout());
-		this.toolBar = new JToolBar();
+		this._toolBar = new JToolBar();
 
-		JButton load = new JButton();
-		load.setActionCommand("load");
-		load.addActionListener(new ActionListener() {
+		_load = new JButton();
+		_load.setActionCommand("load");
+		_load.addActionListener(new ActionListener() {
 		    @Override
 		public void actionPerformed(ActionEvent e) {
 	    	JFileChooser fileChooser = new JFileChooser();
@@ -70,32 +77,32 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	    	   else System.out.println ("load cancelled by user");
 		    }
 		});
-		load.setIcon (loadImage("resources/icons/open.png"));
-		toolBar.add(load);
+		_load.setIcon (loadImage("resources/icons/open.png"));
+		_toolBar.add(_load);
 		
-		toolBar.addSeparator();
+		_toolBar.addSeparator();
 		
-		JButton co2 = new JButton();
-		co2.setActionCommand("co2");
-		co2.addActionListener(new ActionListener() {
+		_co2 = new JButton();
+		_co2.setActionCommand("co2");
+		_co2.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		    	ChangeCO2ClassDialog co2Dialog = new ChangeCO2ClassDialog(_ctrl, listaVehicle, (Frame)SwingUtilities.getWindowAncestor(toolBar));
+		    	ChangeCO2ClassDialog co2Dialog = new ChangeCO2ClassDialog(_ctrl, _listaVehicle, (Frame)SwingUtilities.getWindowAncestor(_toolBar));
 		    }
 		});
-		co2.setIcon(loadImage("resources/icons/co2class.png"));
-		toolBar.add(co2);
+		_co2.setIcon(loadImage("resources/icons/co2class.png"));
+		_toolBar.add(_co2);
 		
-		JButton weather = new JButton();
-		weather.setActionCommand("weather");
-		weather.addActionListener(new ActionListener() {
+		_weather = new JButton();
+		_weather.setActionCommand("weather");
+		_weather.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		    	ChangeWeatherDialog weatherDialog = new ChangeWeatherDialog(_ctrl, listaRoad, (Frame)SwingUtilities.getWindowAncestor(toolBar));
+		    	ChangeWeatherDialog weatherDialog = new ChangeWeatherDialog(_ctrl, _listaRoad, (Frame)SwingUtilities.getWindowAncestor(_toolBar));
 		    }
 		});
-		weather.setIcon(loadImage("resources/icons/weather.png"));
-		toolBar.add(weather);
+		_weather.setIcon(loadImage("resources/icons/weather.png"));
+		_toolBar.add(_weather);
 		
 		
 		JSpinner ticks = new JSpinner(new SpinnerNumberModel(10, 1, 10000, 1));
@@ -110,58 +117,58 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 //		Gris.setBackground(Color.GRAY);
 //		toolBar.add(Gris);
         
-		toolBar.addSeparator();
+		_toolBar.addSeparator();
 		
-		JButton run = new JButton();
-		run.setActionCommand("run");
-		run.addActionListener(new ActionListener() {
+		_run = new JButton();
+		_run.setActionCommand("run");
+		_run.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		    	run_sim(Integer.parseInt(ticks.getValue().toString()));
 		    }
 		});
-		run.setIcon(loadImage("resources/icons/run.png"));
-		toolBar.add(run);
+		_run.setIcon(loadImage("resources/icons/run.png"));
+		_toolBar.add(_run);
 		
-		JButton stop = new JButton();
-		stop.setActionCommand("stop");
-		stop.addActionListener(new ActionListener() {
+		_stop = new JButton();
+		_stop.setActionCommand("stop");
+		_stop.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		       _stopped = true;
 		    }
 		});
-		stop.setIcon(loadImage("resources/icons/stop.png"));
-		toolBar.add(stop);
+		_stop.setIcon(loadImage("resources/icons/stop.png"));
+		_toolBar.add(_stop);
 
 
 				
 		// Spinner
-		toolBar.add(new JLabel(" Ticks:"));
+		_toolBar.add(new JLabel(" Ticks:"));
 		
 		// initial value = 10000 (first parameter)
 		// initial range value = 1       (second parameter)
 		// final range value   = 10000   (third parameter)
 		// increment = 100				 (fourth parameter)
 		
-		toolBar.add(ticks);
+		_toolBar.add(ticks);
 
 		
-		toolBar.add(Box.createGlue());
-		toolBar.addSeparator();
+		_toolBar.add(Box.createGlue());
+		_toolBar.addSeparator();
 		
 		// Exit
-		JButton quitButton = new JButton();
-		quitButton.setToolTipText("Exit");
-		quitButton.setIcon(loadImage("resources/icons/exit.png"));
-		quitButton.addActionListener(new ActionListener() {
+		_quit = new JButton();
+		_quit.setToolTipText("Exit");
+		_quit.setIcon(loadImage("resources/icons/exit.png"));
+		_quit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				quit();
 			}
 		});
-		toolBar.add(quitButton);
-		this.add(toolBar);
+		_toolBar.add(_quit);
+		this.add(_toolBar);
 		_ctrl.addObserver(this);
 
 	}
@@ -182,48 +189,60 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	protected void run_sim(int n) {
 		if (n > 0 && !_stopped) {
 			try {
+				
 				_ctrl.run(1);
+				Thread.sleep(100);
 	         		SwingUtilities.invokeLater(() -> run_sim(n - 1));
+	         		
 			} catch (Exception e) {
 				// TODO show error message
 				_stopped = true;
-				// TODO enable the toolbar
 			}
 		} else {
 			_stopped = false;
+			enableToolbar(!_stopped);
 	                // TODO enable the toolbar
 		}
+	}
+	
+	private void enableToolbar(boolean b) {
+		_load.setEnabled(b);
+		_co2.setEnabled(b);
+		_weather.setEnabled(b);
+		_ticks.setEnabled(b);
+		_run.setEnabled(b);
+		_quit.setEnabled(b);
 	}
 
 	@Override
 	public void onAdvance(RoadMap map, Collection<Event> events, int time) {
-		listaVehicle.clear();
+		_listaVehicle.clear();
 		for	(int i = 0; i < map.getVehicles().size(); i++) {
-			listaVehicle.add(map.getVehicles().get(i));
+			_listaVehicle.add(map.getVehicles().get(i));
 		}
-		listaRoad.clear();
+		_listaRoad.clear();
 		for	(int i = 0; i < map.getRoads().size(); i++) {
-			listaRoad.add(map.getRoads().get(i));
+			_listaRoad.add(map.getRoads().get(i));
 		}
 		
 	}
 
 	@Override
 	public void onEventAdded(RoadMap map, Collection<Event> events, Event e, int time) {
-		listaVehicle.clear();
+		_listaVehicle.clear();
 		for	(int i = 0; i < map.getVehicles().size(); i++) {
-			listaVehicle.add(map.getVehicles().get(i));
+			_listaVehicle.add(map.getVehicles().get(i));
 		}
-		listaRoad.clear();
+		_listaRoad.clear();
 		for	(int i = 0; i < map.getRoads().size(); i++) {
-			listaRoad.add(map.getRoads().get(i));
+			_listaRoad.add(map.getRoads().get(i));
 		}
 	}
 
 	@Override
 	public void onReset(RoadMap map, Collection<Event> events, int time) {
-		listaVehicle.clear();
-		listaRoad.clear();
+		_listaVehicle.clear();
+		_listaRoad.clear();
 		
 	}
 

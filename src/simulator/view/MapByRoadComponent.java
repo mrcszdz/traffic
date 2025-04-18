@@ -88,6 +88,7 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 			int y2 = (i+1)*50+5;
 			g.setColor(Color.BLACK);
 			g.drawLine(x1, y1, x2, y2);
+			g.drawString(r.getId(), x1 - 30, y1 + 3);
 			i++;
 		}
 		//TODO poner el identificador de la road al lado.
@@ -111,6 +112,7 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 				int vY = y1;				
 
 				g.drawImage(_car, vX, vY - 6, 16, 16, this);
+				g.drawString(v.getId(), vX, vY - 8);
 				//TODO poner el identificador del vehículo encima de la imagen.
 			}
 		}
@@ -122,12 +124,14 @@ public class MapByRoadComponent extends JComponent implements TrafficSimObserver
 		for (Road r : _map.getRoads()) {
 			g.setColor(_IN_JUNCTION_COLOR);
 			g.fillOval(50, (i+1)*50, _JRADIUS, _JRADIUS);
+			g.drawString(r.getSrc().getId(), 50, ((i+1)*50) - 8);
 			g.setColor(_RED_LIGHT_COLOR);
 			int idx = r.getDest().get_greenLightIndex();
 			if (idx != -1 && r.equals(r.getDest().get_inRoads().get(idx))) {
 				g.setColor(_GREEN_LIGHT_COLOR);
 			}
 			g.fillOval(getWidth()-100, (i+1)*50, _JRADIUS, _JRADIUS);
+			g.drawString(r.getDest().getId(), getWidth()-100, ((i+1)*50) - 8);
 			i++;
 		}
 		//TODO poner el nombre d la junction encima.
