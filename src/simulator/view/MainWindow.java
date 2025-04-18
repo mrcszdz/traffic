@@ -66,7 +66,7 @@ public class MainWindow extends JFrame {
 		mapCompView.setPreferredSize(new Dimension(500, 400));
 		mapsPanel.add(mapCompView);
 		
-		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		//this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);
 		

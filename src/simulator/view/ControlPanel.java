@@ -124,6 +124,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		_run.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
+		    	enableToolbar(false);
 		    	run_sim(Integer.parseInt(ticks.getValue().toString()));
 		    }
 		});
@@ -189,7 +190,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	protected void run_sim(int n) {
 		if (n > 0 && !_stopped) {
 			try {
-				
 				_ctrl.run(1);
 				Thread.sleep(100);
 	         		SwingUtilities.invokeLater(() -> run_sim(n - 1));
@@ -200,16 +200,16 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 			}
 		} else {
 			_stopped = false;
-			enableToolbar(!_stopped);
+			enableToolbar(true);
 	                // TODO enable the toolbar
 		}
 	}
 	
 	private void enableToolbar(boolean b) {
+		
 		_load.setEnabled(b);
 		_co2.setEnabled(b);
 		_weather.setEnabled(b);
-		_ticks.setEnabled(b);
 		_run.setEnabled(b);
 		_quit.setEnabled(b);
 	}
