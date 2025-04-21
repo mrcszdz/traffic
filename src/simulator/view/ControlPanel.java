@@ -196,6 +196,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	         		
 			} catch (Exception e) {
 				// TODO show error message
+				System.out.println("Error: " + e.getMessage());
 				_stopped = true;
 			}
 		} else {
