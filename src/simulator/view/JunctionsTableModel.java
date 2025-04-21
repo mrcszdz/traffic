@@ -62,7 +62,8 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 			s = _lj.get(rowIndex).getId();
 			break;
 		case 1:
-			s = _lj.get(rowIndex).get_greenLightIndex();
+			if(_lj.get(rowIndex).get_greenLightIndex() == -1) s = "NONE";
+			else s = _lj.get(rowIndex).get_greenLightIndex();
 			break;
 		case 2:
 			s = _lj.get(rowIndex).get_queueByRoad();
