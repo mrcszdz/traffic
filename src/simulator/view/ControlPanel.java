@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import javax.swing.*;
 
 import simulator.control.Controller;
+import simulator.misc.Pair;
 import simulator.model.Event;
 import simulator.model.Road;
 import simulator.model.RoadMap;
@@ -42,6 +43,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
     private JButton _run;
     private JButton _stop;
     private JButton _quit;
+    private ChangeCO2ClassDialog _changeCO2Class;
 
 	ControlPanel(Controller ctrl) {
 		_ctrl = ctrl;
@@ -55,12 +57,14 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		setLayout(new BorderLayout());
 		this._toolBar = new JToolBar();
 
+		
+		_changeCO2Class = new ChangeCO2ClassDialog(_listaVehicle, (Frame)SwingUtilities.getWindowAncestor(_toolBar));
 		_load = new JButton();
 		_load.setActionCommand("load");
 		_load.addActionListener(new ActionListener() {
 		    @Override
 		public void actionPerformed(ActionEvent e) {
-	    	JFileChooser fileChooser = new JFileChooser();
+	    	JFileChooser fileChooser = new JFileChooser("resources/examples");
 	    	int v = fileChooser.showOpenDialog(null);
     		if (v == JFileChooser.APPROVE_OPTION){
     		   InputStream file;
@@ -87,7 +91,12 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		_co2.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		    	ChangeCO2ClassDialog co2Dialog = new ChangeCO2ClassDialog(_ctrl, _listaVehicle, (Frame)SwingUtilities.getWindowAncestor(_toolBar));
+		    	Boolean accion = openDialog();
+		    	if(accion) {
+		    		addCO2Event();
+			            
+			            
+		    	}
 		    }
 		});
 		_co2.setIcon(loadImage("resources/icons/co2class.png"));
@@ -254,4 +263,18 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	}
 
 	
+	private Boolean openDialog() {
+		
+    	return _changeCO2Class.open(simulator.view.ViewUtils.getWindow(this), _listaVehicle);
+	}
+	
+
+	
+	
+	private void addCO2Event() {
+		List<Pair<String, Integer>> vehiculo = new ArrayList<Pair<String, Integer>>();
+        vehiculo.add(new Pair <String, Integer>(_changeCO2Class.getBoton(), _changeCO2Class.getInt()));
+        SetContClassEvent evento = new SetContClassEvent((_ctrl.get_sim().get_time() + _changeCO2Class.getTicks()), vehiculo);
+        	_ctrl.addEvent(evento);
+	}
 }

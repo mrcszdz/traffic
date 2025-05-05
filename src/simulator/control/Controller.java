@@ -24,7 +24,7 @@ public class Controller {
     }
     
     public void loadEvents(InputStream in) {
-    	//falta la excepcion q nipu de como hacerla
+    	 
     	JSONObject jo = new JSONObject(new JSONTokener(in));
     	JSONArray ja = jo.getJSONArray("events");
     	for(int i = 0; i < ja.length(); i++) {

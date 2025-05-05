@@ -126,7 +126,9 @@ public class Main {
 	}
 
 	private static void parseModeOption(CommandLine line) throws ParseException{
-		//_mode = line.getOptionValue("m") == "gui";
+		if(line.getOptionValue("m") != null) {
+		_mode = line.getOptionValue("m").equals("gui") ;
+		}
 	}
 	
 	private static void initFactories() {
@@ -177,6 +179,7 @@ public class Main {
 			 controller.loadEvents(input);
 			 input.close();
 		 }
+		 
 		 SwingUtilities.invokeLater(new Runnable() {	
 				@Override
 				public void run() {
