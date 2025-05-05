@@ -2,6 +2,7 @@ package simulator.view;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -32,6 +33,7 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 
 	public void addEvent(Event e) {
 		_events.add(e);
+		Collections.sort(_events);
 		
 		fireTableDataChanged();
 	}
@@ -70,6 +72,7 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 	public void onAdvance(RoadMap map, Collection<Event> events, int time) {
 		this.reset();
 		_events.addAll(events);
+		Collections.sort(_events);
 		fireTableDataChanged();
 	}
 
@@ -91,6 +94,7 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 		// TODO Auto-generated method stub
 		this.reset();
 		_events.addAll(events);
+		Collections.sort(_events);
 		fireTableDataChanged();
 	}
 	

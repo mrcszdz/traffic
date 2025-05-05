@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -33,19 +34,26 @@ import simulator.model.Event;
 import simulator.model.Road;
 import simulator.model.SetContClassEvent;
 import simulator.model.SetWeatherEvent;
+import simulator.model.Vehicle;
 import simulator.model.Weather;
 
 public class ChangeWeatherDialog extends JDialog{
 	
+	
+	private JSpinner _ticks;
+	JComboBox<String> _botonWeather;
 	private boolean _estado;
-	public ChangeWeatherDialog(Controller ctrl, List<Road> listaRoad, Frame f){
+	private DefaultComboBoxModel<Road> _roadsModel;
+	private JComboBox<Road> _botonRoads;
+	
+	public ChangeWeatherDialog(List<Road> listaRoad, Frame f){
 		super(f, true);
         //this.dialogInit();
 		this.setTitle("Change CO2 class");
-		this.initGUI(ctrl, listaRoad);
+		this.initGUI(listaRoad);
 	}
 	
-	private void initGUI(Controller ctrl, List<Road> lr) {
+	private void initGUI(List<Road> lr) {
 	     JPanel mainPanel = new JPanel();
 	     mainPanel.setLayout(new BoxLayout(mainPanel , BoxLayout.Y_AXIS));
 	     
@@ -62,31 +70,34 @@ public class ChangeWeatherDialog extends JDialog{
 	     JPanel centerPanel = new JPanel(new FlowLayout());
 	     centerPanel.add( new JLabel("Road:"));
 	     
-	     JComboBox<String> botonRoad = new JComboBox<String>();
+	     _roadsModel = new DefaultComboBoxModel<>();
+	     _botonRoads = new JComboBox<Road>(_roadsModel);
+	     
+
 	     for(int i = 0; i< lr.size(); i++) {
-	    	 botonRoad.addItem(lr.get(i).getId());
+	    	 _botonRoads.addItem(lr.get(i));
 	     }
-	     botonRoad.setPreferredSize(new Dimension(80, 25));
-	     centerPanel.add(botonRoad);
+	     _botonRoads.setPreferredSize(new Dimension(80, 25));
+	     centerPanel.add(_botonRoads);
 	     centerPanel.add(new JLabel("   Weather:"));
 	     
-	     JComboBox<String> botonWeather = new JComboBox<String>();
-	    	 botonWeather.addItem(Weather.CLOUDY.toString());
-	    	 botonWeather.addItem(Weather.WINDY.toString());
-	    	 botonWeather.addItem(Weather.RAINY.toString());
-	    	 botonWeather.addItem(Weather.STORM.toString());
-	    	 botonWeather.addItem(Weather.SUNNY.toString());
-	     botonWeather.setPreferredSize(new Dimension(80, 25));
-	     centerPanel.add(botonWeather);
+	     _botonWeather = new JComboBox<String>();
+	    	 _botonWeather.addItem(Weather.CLOUDY.toString());
+	    	 _botonWeather.addItem(Weather.WINDY.toString());
+	    	 _botonWeather.addItem(Weather.RAINY.toString());
+	    	 _botonWeather.addItem(Weather.STORM.toString());
+	    	 _botonWeather.addItem(Weather.SUNNY.toString());
+	     _botonWeather.setPreferredSize(new Dimension(80, 25));
+	     centerPanel.add(_botonWeather);
 	     
 	     centerPanel.add(new JLabel("   Ticks:"));
 	     
-	     JSpinner ticks = new JSpinner(new SpinnerNumberModel(1, 1, 10000, 1));
+	     _ticks = new JSpinner(new SpinnerNumberModel(1, 1, 10000, 1));
 
-	     ticks.setMaximumSize(new Dimension(50, 25));
-	     ticks.setMinimumSize(new Dimension(50, 25));
-	     ticks.setPreferredSize(new Dimension(80, 25));
-	     centerPanel.add(ticks);
+	     _ticks.setMaximumSize(new Dimension(50, 25));
+	     _ticks.setMinimumSize(new Dimension(50, 25));
+	     _ticks.setPreferredSize(new Dimension(80, 25));
+	     centerPanel.add(_ticks);
 		 
 		 mainPanel.add(centerPanel);
 		 
@@ -109,26 +120,51 @@ public class ChangeWeatherDialog extends JDialog{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-	            if (botonRoad.getSelectedItem() != null) {
-	            	List<Pair<String, Weather>> weather = new ArrayList<Pair<String, Weather>>();
-	            	weather.add(new Pair <String, Weather>(botonRoad.getSelectedItem().toString(), Weather.valueOf(botonWeather.getSelectedItem().toString())));
-	            	SetWeatherEvent evento = new SetWeatherEvent(ctrl.get_sim().get_time() + Integer.parseInt(ticks.getValue().toString()), weather);
-	            	ctrl.addEvent(evento);
-	            }
-	            else _estado = false;
+	         
+	            _estado = true;
 	            ChangeWeatherDialog.this.setVisible(false);
             }
           });
          botPanel.add(ok);
          this.add(mainPanel);
          this.pack();
-         this.setVisible(true);
+         this.setVisible(false);
          
          //this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 	}	
+	
+	public Boolean open(Frame parent, List<Road> roads) {
+
+		// update the comboxBox model -- if you always use the same no
+		// need to update it, you can initialize it in the constructor.
+		//
+		_roadsModel.removeAllElements();
+		for (Road r : roads)
+			_roadsModel.addElement(r);
+
+		// You can change this to place the dialog in the middle of the parent window.
+		//
+		setLocation(parent.getLocation().x + 10, parent.getLocation().y + 10);
+
+		setVisible(true);
+		return _estado && _botonRoads.getSelectedItem() != null;
+	}
 
 	public boolean getEstado() {
 		return _estado;
 	}
+	
+	public int getTicks() {
+		return Integer.parseInt(_ticks.getValue().toString());
+	}
+	
+	public String getRoad() {
+		return _botonRoads.getSelectedItem().toString();
+	}
+	
+	public Weather getWeather() {
+		return Weather.valueOf(_botonWeather.getSelectedItem().toString());
+	}
+	
 }

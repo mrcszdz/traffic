@@ -18,8 +18,10 @@ import simulator.model.Event;
 import simulator.model.Road;
 import simulator.model.RoadMap;
 import simulator.model.SetContClassEvent;
+import simulator.model.SetWeatherEvent;
 import simulator.model.TrafficSimObserver;
 import simulator.model.Vehicle;
+import simulator.model.Weather;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 	 * 
 	 */
 	private static final long serialVersionUID = 1206312102543205364L;
+	private int _time;
     private Controller _ctrl;
     private boolean _stopped;
     private JToolBar _toolBar;
@@ -44,6 +47,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
     private JButton _stop;
     private JButton _quit;
     private ChangeCO2ClassDialog _changeCO2Class;
+    private ChangeWeatherDialog _changeWeather;
 
 	ControlPanel(Controller ctrl) {
 		_ctrl = ctrl;
@@ -59,6 +63,9 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 
 		
 		_changeCO2Class = new ChangeCO2ClassDialog(_listaVehicle, (Frame)SwingUtilities.getWindowAncestor(_toolBar));
+		
+		_changeWeather = new ChangeWeatherDialog(_listaRoad, (Frame)SwingUtilities.getWindowAncestor(_toolBar));
+		
 		_load = new JButton();
 		_load.setActionCommand("load");
 		_load.addActionListener(new ActionListener() {
@@ -91,11 +98,9 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		_co2.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		    	Boolean accion = openDialog();
+		    	Boolean accion = openCO2Dialog();
 		    	if(accion) {
-		    		addCO2Event();
-			            
-			            
+		    		addCO2Event();  
 		    	}
 		    }
 		});
@@ -107,7 +112,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 		_weather.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
-		    	ChangeWeatherDialog weatherDialog = new ChangeWeatherDialog(_ctrl, _listaRoad, (Frame)SwingUtilities.getWindowAncestor(_toolBar));
+		    	Boolean accion = openWeatherDialog();
+		    	if(accion) {
+		    		addWeatherEvent();  
+		    	}
 		    }
 		});
 		_weather.setIcon(loadImage("resources/icons/weather.png"));
@@ -226,6 +234,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 
 	@Override
 	public void onAdvance(RoadMap map, Collection<Event> events, int time) {
+		_time = time;
 		_listaVehicle.clear();
 		for	(int i = 0; i < map.getVehicles().size(); i++) {
 			_listaVehicle.add(map.getVehicles().get(i));
@@ -239,6 +248,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 
 	@Override
 	public void onEventAdded(RoadMap map, Collection<Event> events, Event e, int time) {
+		_time = time;
 		_listaVehicle.clear();
 		for	(int i = 0; i < map.getVehicles().size(); i++) {
 			_listaVehicle.add(map.getVehicles().get(i));
@@ -251,6 +261,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 
 	@Override
 	public void onReset(RoadMap map, Collection<Event> events, int time) {
+		_time = time;
 		_listaVehicle.clear();
 		_listaRoad.clear();
 		
@@ -258,23 +269,34 @@ public class ControlPanel extends JPanel implements TrafficSimObserver{
 
 	@Override
 	public void onRegister(RoadMap map, Collection<Event> events, int time) {
+		_time = time;
 		// TODO Auto-generated method stub
 		
 	}
 
 	
-	private Boolean openDialog() {
-		
+	private Boolean openCO2Dialog() {
     	return _changeCO2Class.open(simulator.view.ViewUtils.getWindow(this), _listaVehicle);
 	}
 	
-
+	private Boolean openWeatherDialog() {
+    	return _changeWeather.open(simulator.view.ViewUtils.getWindow(this), _listaRoad);
+	}
 	
+	
+	private void addWeatherEvent() {
+		   
+        List<Pair<String, Weather>> weather = new ArrayList<Pair<String, Weather>>();
+        weather.add(new Pair <String, Weather>(_changeWeather.getRoad(), _changeWeather.getWeather()) );
+        SetWeatherEvent evento = new SetWeatherEvent(_time + _changeWeather.getTicks(), weather);
+        _ctrl.addEvent(evento);
+
+	}
 	
 	private void addCO2Event() {
 		List<Pair<String, Integer>> vehiculo = new ArrayList<Pair<String, Integer>>();
         vehiculo.add(new Pair <String, Integer>(_changeCO2Class.getBoton(), _changeCO2Class.getInt()));
-        SetContClassEvent evento = new SetContClassEvent((_ctrl.get_sim().get_time() + _changeCO2Class.getTicks()), vehiculo);
+        SetContClassEvent evento = new SetContClassEvent((_time + _changeCO2Class.getTicks()), vehiculo);
         	_ctrl.addEvent(evento);
 	}
 }
